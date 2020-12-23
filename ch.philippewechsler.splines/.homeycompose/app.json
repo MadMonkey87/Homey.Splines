@@ -1,0 +1,24 @@
+{
+  "id": "ch.philippewechsler.splines",
+  "version": "1.0.0",
+  "compatibility": ">=4.0.0",
+  "sdk": 3,
+  "name": {
+    "en": "Splines"
+  },
+  "description": {
+    "en": "Provides an UI to create Splines and some flow cards to make use of it."
+  },
+  "category": [
+    "tools"
+  ],
+  "permissions": [],
+  "images": {
+    "large": "/assets/images/large.png",
+    "small": "/assets/images/small.png"
+  },
+  "author": {
+    "name": "Philippe Wechsler",
+    "email": "myself@philippewechsler.ch"
+  }
+}
