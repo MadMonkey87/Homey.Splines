@@ -65,7 +65,49 @@
 
                             <div class="row">
                                 <div class="col-sm">
-                                    <canvas id="chart" width="400" height="400"></canvas>
+                                    <div class="form-group">
+                                        <label>Min X</label>
+                                        <div class="input-group">
+                                            <input type="number" class="form-control" id="minx">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm">
+                                    <div class="form-group">
+                                        <label>Max X</label>
+                                        <div class="input-group">
+                                            <input type="number" class="form-control" id="maxx">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm">
+                                    <div class="form-group">
+                                        <label>Min Y</label>
+                                        <div class="input-group">
+                                            <input type="number" class="form-control" id="miny">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm">
+                                    <div class="form-group">
+                                        <label>Max Y</label>
+                                        <div class="input-group">
+                                            <input type="number" class="form-control" id="maxy">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-sm">
+                                    <button type="button" class="btn btn-primary float-right" id="addVertexButton"
+                                        style="width: 42px; height: 42px">
+                                        <span class="fa fa-plus"></span>
+                                    </button>
+                                    <canvas id="chart" width="400" height="400">
+                                    </canvas>
                                 </div>
                             </div>
 
@@ -189,26 +231,50 @@
             });
 
             document.getElementById('createSplineModalButton').addEventListener('click', (e) => {
-                this.selectedSpline = { name: '', vertices: [], id: null };
+                this.selectedSpline = { name: 'New Spline', vertices: [{ x: 0, y: 0 }, { x: 100, y: 0 }], id: null, minx: 0, miny: 0, maxx: 100, maxy: 25 };
                 renderSelectedSpline();
             });
 
-            /*document.getElementById('newHeaderItemSaveButton').addEventListener('click', (e) => {
-                this.selectedHeaderCollection.headers.push({ name: document.getElementById('newHeaderItemName').value, value: document.getElementById('newHeaderItemValue').value });
-                document.getElementById('newHeaderItemName').value = '';
-                document.getElementById('newHeaderItemValue').value = '';
-                renderSelectedHeaderCollection();
-            });*/
+            document.getElementById('splineName').addEventListener('input', (e) => { updateVertexForm(); renderSelectedSpline(); });
+            document.getElementById('minx').addEventListener('input', (e) => { updateVertexForm(); renderSelectedSpline(); });
+            document.getElementById('miny').addEventListener('input', (e) => { updateVertexForm(); renderSelectedSpline(); });
+            document.getElementById('maxx').addEventListener('input', (e) => { updateVertexForm(); renderSelectedSpline(); });
+            document.getElementById('maxy').addEventListener('input', (e) => { updateVertexForm(); renderSelectedSpline(); });
+            document.getElementById('addVertexButton').addEventListener('click', (e) => { addVertex(); });
 
-            document.getElementById('splineName').addEventListener('input', (e) => { updateVertexForm() });
-            //document.getElementById('newHeaderItemName').addEventListener('input', (e) => { updateVertexForm() });
-            //document.getElementById('newHeaderItemValue').addEventListener('input', (e) => { updateVertexForm() });
+            function addVertex(x, y) {
+                if (!x) {
+                    x = (this.selectedSpline.maxx - this.selectedSpline.minx) / 2;
+                }
+                if (!y) {
+                    y = (this.selectedSpline.maxy - this.selectedSpline.miny) / 2;
+                }
+                this.selectedSpline.vertices.push({ x: x, y: y });
+                sortVertices();
+                renderSelectedSpline();
+            }
+
+            function sortVertices() {
+                this.selectedSpline.vertices.sort((a, b) => {
+                    if (a.x < b.x) {
+                        return -1;
+                    }
+                    if (a.x > b.x) {
+                        return 1;
+                    }
+                    return 0;
+                });
+            }
 
             function updateVertexForm() {
-                //this.selectedHeaderCollection.name = document.getElementById('newHeaderCollectionName').value;
+                this.selectedSpline.name = document.getElementById('splineName').value;
+                this.selectedSpline.minx = parseInt(document.getElementById('minx').value);
+                this.selectedSpline.maxx = parseInt(document.getElementById('maxx').value);
+                this.selectedSpline.miny = parseInt(document.getElementById('miny').value);
+                this.selectedSpline.maxy = parseInt(document.getElementById('maxy').value);
                 //this.selectedHeaderCollection.description = document.getElementById('newHeaderCollectionDescription').value;
 
-                //document.getElementById('newHeaderCollectionSaveButton').disabled = this.selectedHeaderCollection.name.length < 3 || this.selectedHeaderCollection.headers.length == 0;
+                document.getElementById('newSplineSaveButton').disabled = this.selectedSpline.name.length < 3;
                 //document.getElementById('newHeaderItemSaveButton').disabled = document.getElementById('newHeaderItemName').value.length < 1;
             }
 
@@ -222,9 +288,14 @@
                             <div class="form-group">
                                 <small class="form-text text-muted">${this.selectedSpline.vertices[i].x}</small>
                                 <label style="font-weight: bold; font-size: 18px;">${this.selectedSpline.vertices[i].y}</label>
+                                `;
+                    if (i > 0 && i + 1 < this.selectedSpline.vertices.length) {
+                        vertexMarkup += `
                                 <button type="button" class="btn btn-secondary float-right" style="width: 42px; height: 42px" onclick="removeVertex(${i})">
                                     <span class="fa fa-trash"></span>
-                                </button>
+                                </button>`;
+                    }
+                    vertexMarkup += `
                             </div>
                         </li>
                     `;
@@ -236,9 +307,15 @@
                 chart.options.scales.xAxes[0].ticks.max = this.selectedSpline.maxx;
                 chart.options.scales.yAxes[0].ticks.min = this.selectedSpline.miny;
                 chart.options.scales.yAxes[0].ticks.max = this.selectedSpline.maxy;
+                document.getElementById('minx').value = this.selectedSpline.minx;
+                document.getElementById('miny').value = this.selectedSpline.miny;
+                document.getElementById('maxx').value = this.selectedSpline.maxx;
+                document.getElementById('maxy').value = this.selectedSpline.maxy;
 
                 chart.update();
                 //updateVertexForm();
+
+                document.getElementById('addVertexButton').disabled = this.selectedSpline.vertices.length > 30;
             }
 
             window.removeVertex = function (e) {
@@ -315,16 +392,11 @@
                     dragOptions: {
                         showTooltip: true
                     },
-                    /*onDragStart: function (e) {
-                        console.log(e)
+                    onDragStart: function (e) {
+
                     },
                     onDrag: function (e, datasetIndex, index, value) {
                         e.target.style.cursor = 'grabbing'
-                        console.log(datasetIndex, index, value)
-                    },
-                    onDragEnd: function (e, datasetIndex, index, value) {
-                        e.target.style.cursor = 'default'
-                        console.log(datasetIndex, index, value)
                     },
                     hover: {
                         onHover: function (e) {
@@ -332,7 +404,18 @@
                             if (point.length) e.target.style.cursor = 'grab'
                             else e.target.style.cursor = 'default'
                         }
-                    }*/
+                    },
+                    onDragEnd: function (e, datasetIndex, index, value) {
+                        e.target.style.cursor = 'default';
+                        if (index == 0) {
+                            value.x = this.selectedSpline.minx;
+                        } else if (index == this.selectedSpline.vertices.length - 1) {
+                            value.x = this.selectedSpline.maxx;
+                        }
+                        this.selectedSpline.vertices[index] = value;
+                        sortVertices();
+                        renderSelectedSpline();
+                    }
                 }
             }
 
