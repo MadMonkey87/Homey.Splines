@@ -280,25 +280,53 @@
 
             function renderSelectedSpline() {
                 document.getElementById('splineName').value = this.selectedSpline.name;
-                let vertexMarkup = '';
+                let vertexMarkup = `
+                            <div class="row" >
+                                <div class="col-sm">
+                                    <div class="form-group">
+                                        <label>   X values</label>
+                                    </div>
+                                </div>
+                                <div class="col-sm">
+                                    <div class="form-group">
+                                        <label>   Y values</label>
+                                    </div>
+                                </div>
+                                <div style="-ms-flex: 0 0 50px;flex: 0 0 50px; margin-right: 15px">
+                                </div>
+                            </div>
+                `;
                 chart.data.datasets[0].data = [];
                 for (var i = 0; i < this.selectedSpline.vertices.length; i++) {
                     vertexMarkup += `
-                        <li class="list-group-item transparent">
-                            <div class="form-group">
-                                <small class="form-text text-muted">${this.selectedSpline.vertices[i].x}</small>
-                                <label style="font-weight: bold; font-size: 18px;">${this.selectedSpline.vertices[i].y}</label>
-                                `;
+                    <div class="row">
+                                <div class="col-sm">
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <input type="number" class="form-control" value="${this.selectedSpline.vertices[i].x}" min="${this.selectedSpline.minx}" max="${this.selectedSpline.maxx}">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm">
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <input type="number" class="form-control" value="${this.selectedSpline.vertices[i].y}" min="${this.selectedSpline.miny}" max="${this.selectedSpline.maxy}">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div style="-ms-flex: 0 0 50px;flex: 0 0 50px; margin-right: 15px">`;
                     if (i > 0 && i + 1 < this.selectedSpline.vertices.length) {
                         vertexMarkup += `
-                                <button type="button" class="btn btn-secondary float-right" style="width: 42px; height: 42px" onclick="removeVertex(${i})">
-                                    <span class="fa fa-trash"></span>
-                                </button>`;
+                        <button type="button" class="btn btn-secondary float-right" style="width: 42px; height: 42px" onclick="removeVertex(${i})">
+                                        <span class="fa fa-trash"></span>
+                                    </button>`;
                     }
                     vertexMarkup += `
+                                </div>
                             </div>
-                        </li>
                     `;
+
+
                     chart.data.datasets[0].data.push({ x: this.selectedSpline.vertices[i].x, y: this.selectedSpline.vertices[i].y });
                 }
                 document.getElementById('splineVertices').innerHTML = vertexMarkup;
