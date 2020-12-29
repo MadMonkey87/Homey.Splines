@@ -2,7 +2,8 @@
   "id": "ch.philippewechsler.splines",
   "version": "1.0.0",
   "compatibility": ">=4.0.0",
-  "sdk": 3,
+  "brandColor": "#00aaff",
+  "sdk": 2,
   "name": {
     "en": "Splines"
   },
@@ -18,7 +19,20 @@
     "small": "/assets/images/small.png"
   },
   "author": {
-    "name": "Philippe Wechsler",
-    "email": "myself@philippewechsler.ch"
+    "name": "Philippe Wechsler"
+  },
+  "contributors": {
+    "developers": [
+      {
+        "name": "MadMonkey87"
+      }
+    ]
+  },
+  "contributing": {
+    "donate": {
+      "paypal": {
+        "username": "madmonkey87"
+      }
+    }
   }
 }
