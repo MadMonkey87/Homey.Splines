@@ -1,8 +1,8 @@
 <html>
 
 <head>
-    <!--<script type="text/javascript" src="/homey.js" data-origin="settings"></script>-->
-    <script src='https://cdn.staticaly.com/gh/robertklep/homey-mocks/v0.0.4/homey-settings-mock.js'></script>
+    <script type="text/javascript" src="/homey.js" data-origin="settings"></script>
+    <!--<script src='https://cdn.staticaly.com/gh/robertklep/homey-mocks/v0.0.4/homey-settings-mock.js'></script>-->
     <!--<script src="js/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
         <script src="js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>-->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
@@ -64,7 +64,7 @@
                             </div>
 
                             <div class="row">
-                                <div class="col-sm">
+                                <div class="col-6">
                                     <div class="form-group">
                                         <label>Min X</label>
                                         <div class="input-group">
@@ -72,7 +72,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-sm">
+                                <div class="col-6">
                                     <div class="form-group">
                                         <label>Max X</label>
                                         <div class="input-group">
@@ -82,7 +82,7 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-sm">
+                                <div class="col-6">
                                     <div class="form-group">
                                         <label>Min Y</label>
                                         <div class="input-group">
@@ -90,7 +90,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-sm">
+                                <div class="col-6">
                                     <div class="form-group">
                                         <label>Max Y</label>
                                         <div class="input-group">
@@ -201,13 +201,14 @@
             }
 
             window.editSpline = function (e) {
-                this.selectedSpline = { ...splines[e] };
+                this.selectedSpline = { ...splines[e], vertices: [...splines[e].vertices] };
                 renderSelectedSpline();
             }
 
             persistSplines = function () {
                 Homey.set('splines', splines, (err, result) => {
                     if (err) return Homey.alert(err);
+                    loadSplines();
                 });
             }
 
@@ -301,12 +302,12 @@
                 document.getElementById('splineName').value = this.selectedSpline.name;
                 let vertexMarkup = `
                             <div class="row" >
-                                <div class="col-sm">
+                                <div class="col-5">
                                     <div class="form-group">
                                         <label>   X values</label>
                                     </div>
                                 </div>
-                                <div class="col-sm">
+                                <div class="col-5">
                                     <div class="form-group">
                                         <label>   Y values</label>
                                     </div>
@@ -319,32 +320,29 @@
                 for (var i = 0; i < this.selectedSpline.vertices.length; i++) {
                     vertexMarkup += `
                     <div class="row">
-                                <div class="col-sm">
+                                <div class="col-5">
                                     <div class="form-group">
                                         <div class="input-group">
-                                            <input type="number" class="form-control" value="${this.selectedSpline.vertices[i].x}" min="${this.selectedSpline.minx}" max="${this.selectedSpline.maxx}">
+                                            <input type="number" class="form-control" ${(i == 0 || i + 1 == this.selectedSpline.vertices.length) ? 'disabled' : ''} value="${this.selectedSpline.vertices[i].x}" min="${this.selectedSpline.minx}" max="${this.selectedSpline.maxx}" onchange="changeVertexX(this.value, ${i})">
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-sm">
+                                <div class="col-5">
                                     <div class="form-group">
                                         <div class="input-group">
-                                            <input type="number" class="form-control" value="${this.selectedSpline.vertices[i].y}" min="${this.selectedSpline.miny}" max="${this.selectedSpline.maxy}">
+                                            <input type="number" class="form-control" value="${this.selectedSpline.vertices[i].y}" min="${this.selectedSpline.miny}" max="${this.selectedSpline.maxy}" onchange="changeVertexY(this.value, ${i})">
                                         </div>
                                     </div>
                                 </div>
-                                <div style="-ms-flex: 0 0 50px;flex: 0 0 50px; margin-right: 15px">`;
-                    if (i > 0 && i + 1 < this.selectedSpline.vertices.length) {
-                        vertexMarkup += `
-                        <button type="button" class="btn btn-secondary float-right" style="width: 42px; height: 42px" onclick="removeVertex(${i})">
-                                        <span class="fa fa-trash"></span>
-                                    </button>`;
-                    }
-                    vertexMarkup += `
+                                <div class="col-2">
+                                    <div class="form-group">
+                                        <button type="button" ${(i == 0 || i + 1 == this.selectedSpline.vertices.length) ? 'disabled' : ''} class="btn btn-secondary float-right" style="width: 42px; height: 42px" onclick="removeVertex(${i})">
+                                            <span class="fa fa-trash"></span>
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                     `;
-
 
                     chart.data.datasets[0].data.push({ x: this.selectedSpline.vertices[i].x, y: this.selectedSpline.vertices[i].y });
                 }
@@ -368,6 +366,16 @@
                 renderSelectedSpline();
             }
 
+            window.changeVertexX = function (v, i) {
+                this.selectedSpline.vertices[i].x = v;
+                updateBoundaries();
+            }
+
+            window.changeVertexY = function (v, i) {
+                this.selectedSpline.vertices[i].y = v;
+                updateBoundaries();
+            }
+
             // utils
 
             function generateGuid() {
@@ -377,19 +385,22 @@
                 });
             }
 
-            if (Homey.isMock) {
-                splines.push({ id: '1', name: "sample spline 1", minx: 0, miny: 0, maxx: 1, maxy: 1, vertices: [{ x: 0, y: 0 }, { x: 0.25, y: 1 }, { x: 0.75, y: 0.1 }, { x: 1, y: 0.75 }] });
-                splines.push({ id: '2', name: "sample spline 2", minx: 0, miny: 0, maxx: 1, maxy: 1, vertices: [{ x: 0, y: 0 }, { x: 0.25, y: 1 }, { x: 0.75, y: 0.1 }, { x: 1, y: 0.75 }] });
-                splines.push({ id: '3', name: "sample spline 3", minx: 0, miny: 0, maxx: 1, maxy: 1, vertices: [{ x: 0, y: 0 }, { x: 0.25, y: 1 }, { x: 0.75, y: 0.1 }, { x: 1, y: 0.75 }] });
-                renderSplines();
-            } else {
-                Homey.get('splines', (err, result) => {
-                    if (err) return Homey.alert(err);
-                    if (result) {
-                        splines = result;
-                    }
+            function loadSplines() {
+                if (Homey.isMock) {
+                    splines = [];
+                    splines.push({ id: '1', name: "sample spline 1", minx: 0, miny: 0, maxx: 1, maxy: 1, vertices: [{ x: 0, y: 0 }, { x: 0.25, y: 1 }, { x: 0.75, y: 0.1 }, { x: 1, y: 0.75 }] });
+                    splines.push({ id: '2', name: "sample spline 2", minx: 0, miny: 0, maxx: 1, maxy: 1, vertices: [{ x: 0, y: 0 }, { x: 0.25, y: 1 }, { x: 0.75, y: 0.1 }, { x: 1, y: 0.75 }] });
+                    splines.push({ id: '3', name: "sample spline 3", minx: 0, miny: 0, maxx: 1, maxy: 1, vertices: [{ x: 0, y: 0 }, { x: 0.25, y: 1 }, { x: 0.75, y: 0.1 }, { x: 1, y: 0.75 }] });
                     renderSplines();
-                })
+                } else {
+                    Homey.get('splines', (err, result) => {
+                        if (err) return Homey.alert(err);
+                        if (result) {
+                            splines = result;
+                        }
+                        renderSplines();
+                    })
+                }
             }
 
             var chartOptions = {
@@ -410,6 +421,7 @@
                             pointHoverBorderColor: 'rgb(0, 170, 255)',
                             pointHoverBackgroundColor: 'rgb(0,191,255)',
                             lineTension: 0.25,
+                            pointHitRadius: 25,
                             data: [],
                         }
                     ]
@@ -466,6 +478,8 @@
             }
 
             let chart = new Chart(document.getElementById('chart').getContext('2d'), chartOptions);
+
+            loadSplines();
 
             Homey.ready();
         }
