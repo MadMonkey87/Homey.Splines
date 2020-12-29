@@ -1,0 +1,347 @@
+<html>
+
+<head>
+    <!--<script type="text/javascript" src="/homey.js" data-origin="settings"></script>-->
+    <script src='https://cdn.staticaly.com/gh/robertklep/homey-mocks/v0.0.4/homey-settings-mock.js'></script>
+    <!--<script src="js/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+        <script src="js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>-->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+        integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>
+    <script
+        src="https://cdn.jsdelivr.net/npm/chartjs-plugin-dragdata@latest/dist/chartjs-plugin-dragdata.min.js"></script>
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/animation.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+
+<body>
+
+    <div class="homeyAnimation"></div>
+
+    <nav>
+        <div class="nav nav-tabs glass-dark" id="nav-tab" role="tablist"
+            style="margin-left: 5px; margin-top: 5px; margin-right: 5px;">
+            <a class="nav-item nav-link active" id="nav-splines-tab" data-toggle="tab" href="#nav-splines" role="tab"
+                aria-controls="nav-splines" aria-selected="true"
+                style="border-top-left-radius: 3px; border-bottom-left-radius: 3px;">Splines</a>
+            <a class="nav-item nav-link" id="nav-about-tab" data-toggle="tab" href="#nav-about" role="tab"
+                aria-controls="nav-contact" aria-selected="false">About</a>
+        </div>
+    </nav>
+    <div class="tab-content" id="nav-tabContent">
+        <div class="tab-pane fade show active" id="nav-splines" role="tabpanel" aria-labelledby="nav-splines-tab">
+
+
+            <!-- spline modal  begin-->
+            <div class="modal fade" id="createSplineModal" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Spline</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+
+                            <div class="row">
+                                <div class="col-sm">
+                                    <div class="form-group">
+                                        <label>Name</label>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" id="splineName">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-sm">
+                                    <canvas id="chart" width="400" height="400"></canvas>
+                                </div>
+                            </div>
+
+                            <ul class="list-group list-group-flush" id="splineVertices">
+                            </ul>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                            <button type="button" class="btn btn-primary" data-dismiss="modal"
+                                id="newSplineSaveButton">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--spline modal end-->
+
+            <!--splines tab begin-->
+            <div class="card glass" style="margin-top: 10px;">
+                <div class="card-body">
+                    <p class="card-text">Some description goes here...</p>
+
+                    <div class="row">
+                        <div class="col-sm">
+                            <button type="button" class="btn btn-primary float-right" id="createSplineModalButton"
+                                style="width: 125px;" data-toggle="modal"
+                                data-target="#createSplineModal">Create</button>
+                        </div>
+                    </div>
+                    <br>
+
+                    <ul class="list-group list-group-flush" id="splineCollection">
+                    </ul>
+                </div>
+            </div>
+            <!--splines tab end-->
+
+        </div>
+
+        <div class="tab-pane fade" id="nav-about" role="tabpanel" aria-labelledby="nav-about-tab">
+
+            <!--about tab begin-->
+            <div class="card glass" style="margin-top: 10px;">
+                <div class="card-body">
+                    <h5 class="card-title">Splines for homey v1.0.0</h5>
+                    <h3 class="card-title">© Philippe Wechsler 2020</h3>
+                    <div>Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a>
+                        from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
+                </div>
+            </div>
+
+            <!--about tab end-->
+        </div>
+    </div>
+
+    <script type="text/javascript">
+
+        function onHomeyReady(Homey) {
+
+            if (Homey.isMock) {
+                Homey.alert('Warning: Homey is mocked only!!!');
+            }
+
+            // splines main
+
+            let splines = [];
+
+            function renderSplines() {
+                let collectionMarkup = '';
+                for (var i = 0; i < splines.length; i++) {
+                    collectionMarkup += `
+                        <li class="list-group-item transparent">
+                            <div class="form-group">
+                                <button type="button" class="btn btn-secondary float-right" style="margin-top: 5px; height: 42px; width: 42px"><span
+                                        class="fa fa-trash" onclick="removeSpline(${i})"></span></button>
+                                <button type="button" class="btn btn-primary float-right" style="margin-top: 5px; height: 42px; width: 42px" data-toggle="modal" data-target="#createSplineModal" onclick="editSpline(${i})"><span
+                                        class="fa fa-edit"></span></button>
+                                <label style="font-weight: bold; font-size: 18px; margin-top: 5px">${splines[i].name}</label>
+                            </div>
+                        </li>
+                    `;
+                }
+                document.getElementById('splineCollection').innerHTML = collectionMarkup;
+            }
+
+            window.removeSpline = function (e) {
+                splines.splice(e, 1);
+                renderSplines();
+                persistSplines();
+            }
+
+            window.editSpline = function (e) {
+                this.selectedSpline = { ...splines[e] };
+                renderSelectedSpline();
+            }
+
+            persistSplines = function () {
+                Homey.set('splines', splines, (err, result) => {
+                    if (err) return Homey.alert(err);
+                });
+            }
+
+            // create/edit spline dialog
+
+            let selectedSpline = {};
+
+            document.getElementById('newSplineSaveButton').addEventListener('click', (e) => {
+                if (this.selectedSpline.id == null) {
+                    this.selectedSpline.id = generateGuid();
+                    splines.push(this.selectedSpline);
+                } else {
+                    for (var i = 0; i < splines.length; i++) {
+                        if (splines[i].id === this.selectedSpline.id) {
+                            splines[i] = this.selectedSpline;
+                            break;
+                        }
+                    }
+                }
+                renderSplines();
+                persistSplines();
+            });
+
+            document.getElementById('createSplineModalButton').addEventListener('click', (e) => {
+                this.selectedSpline = { name: '', vertices: [], id: null };
+                renderSelectedSpline();
+            });
+
+            /*document.getElementById('newHeaderItemSaveButton').addEventListener('click', (e) => {
+                this.selectedHeaderCollection.headers.push({ name: document.getElementById('newHeaderItemName').value, value: document.getElementById('newHeaderItemValue').value });
+                document.getElementById('newHeaderItemName').value = '';
+                document.getElementById('newHeaderItemValue').value = '';
+                renderSelectedHeaderCollection();
+            });*/
+
+            document.getElementById('splineName').addEventListener('input', (e) => { updateVertexForm() });
+            //document.getElementById('newHeaderItemName').addEventListener('input', (e) => { updateVertexForm() });
+            //document.getElementById('newHeaderItemValue').addEventListener('input', (e) => { updateVertexForm() });
+
+            function updateVertexForm() {
+                //this.selectedHeaderCollection.name = document.getElementById('newHeaderCollectionName').value;
+                //this.selectedHeaderCollection.description = document.getElementById('newHeaderCollectionDescription').value;
+
+                //document.getElementById('newHeaderCollectionSaveButton').disabled = this.selectedHeaderCollection.name.length < 3 || this.selectedHeaderCollection.headers.length == 0;
+                //document.getElementById('newHeaderItemSaveButton').disabled = document.getElementById('newHeaderItemName').value.length < 1;
+            }
+
+            function renderSelectedSpline() {
+                document.getElementById('splineName').value = this.selectedSpline.name;
+                let vertexMarkup = '';
+                chart.data.datasets[0].data = [];
+                for (var i = 0; i < this.selectedSpline.vertices.length; i++) {
+                    vertexMarkup += `
+                        <li class="list-group-item transparent">
+                            <div class="form-group">
+                                <small class="form-text text-muted">${this.selectedSpline.vertices[i].x}</small>
+                                <label style="font-weight: bold; font-size: 18px;">${this.selectedSpline.vertices[i].y}</label>
+                                <button type="button" class="btn btn-secondary float-right" style="width: 42px; height: 42px" onclick="removeVertex(${i})">
+                                    <span class="fa fa-trash"></span>
+                                </button>
+                            </div>
+                        </li>
+                    `;
+                    chart.data.datasets[0].data.push({ x: this.selectedSpline.vertices[i].x, y: this.selectedSpline.vertices[i].y });
+                }
+                document.getElementById('splineVertices').innerHTML = vertexMarkup;
+
+                chart.options.scales.xAxes[0].ticks.min = this.selectedSpline.minx;
+                chart.options.scales.xAxes[0].ticks.max = this.selectedSpline.maxx;
+                chart.options.scales.yAxes[0].ticks.min = this.selectedSpline.miny;
+                chart.options.scales.yAxes[0].ticks.max = this.selectedSpline.maxy;
+
+                chart.update();
+                //updateVertexForm();
+            }
+
+            window.removeVertex = function (e) {
+                this.selectedSpline.vertices.splice(e, 1);
+                renderSelectedSpline();
+            }
+
+            // utils
+
+            function generateGuid() {
+                return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+                    var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+                    return v.toString(16);
+                });
+            }
+
+            if (Homey.isMock) {
+                splines.push({ id: '1', name: "sample spline 1", minx: 0, miny: 0, maxx: 1, maxy: 1, vertices: [{ x: 0, y: 0 }, { x: 0.25, y: 1 }, { x: 0.75, y: 0.1 }, { x: 1, y: 0.75 }] });
+                splines.push({ id: '2', name: "sample spline 2", minx: 0, miny: 0, maxx: 1, maxy: 1, vertices: [{ x: 0, y: 0 }, { x: 0.25, y: 1 }, { x: 0.75, y: 0.1 }, { x: 1, y: 0.75 }] });
+                splines.push({ id: '3', name: "sample spline 3", minx: 0, miny: 0, maxx: 1, maxy: 1, vertices: [{ x: 0, y: 0 }, { x: 0.25, y: 1 }, { x: 0.75, y: 0.1 }, { x: 1, y: 0.75 }] });
+                renderSplines();
+            } else {
+                Homey.get('splines', (err, result) => {
+                    if (err) return Homey.alert(err);
+                    if (result) {
+                        splines = result;
+                    }
+                    renderSplines();
+                })
+            }
+
+            var chartOptions = {
+                type: 'scatter',
+                data: {
+                    datasets: [
+                        {
+                            showLine: true,
+                            borderColor: 'rgb(0, 170, 255)',
+                            borderWidth: 3,
+                            backgroundColor: 'rgba(0,191,255,0.35)',
+                            pointRadius: 5,
+                            pointBackgroundColor: 'rgb(0,191,255)',
+                            pointBorderColor: 'rgb(0, 170, 255)',
+                            pointBorderWidth: 3,
+                            pointHoverRadius: 10,
+                            pointHoverBorderWidth: 3,
+                            pointHoverBorderColor: 'rgb(0, 170, 255)',
+                            pointHoverBackgroundColor: 'rgb(0,191,255)',
+                            data: [],
+                        }
+                    ]
+                },
+                options: {
+                    legend: {
+                        display: false
+                    },
+                    scales: {
+                        xAxes: [{
+                            ticks: {
+                                min: 0,
+                                max: 100
+                            }
+                        }],
+                        yAxes: [{
+                            ticks: {
+                                min: 0,
+                                max: 100
+                            }
+                        }]
+                    },
+                    dragData: true,
+                    dragX: true,
+                    dragDataRound: 3,
+                    dragOptions: {
+                        showTooltip: true
+                    },
+                    /*onDragStart: function (e) {
+                        console.log(e)
+                    },
+                    onDrag: function (e, datasetIndex, index, value) {
+                        e.target.style.cursor = 'grabbing'
+                        console.log(datasetIndex, index, value)
+                    },
+                    onDragEnd: function (e, datasetIndex, index, value) {
+                        e.target.style.cursor = 'default'
+                        console.log(datasetIndex, index, value)
+                    },
+                    hover: {
+                        onHover: function (e) {
+                            const point = this.getElementAtEvent(e)
+                            if (point.length) e.target.style.cursor = 'grab'
+                            else e.target.style.cursor = 'default'
+                        }
+                    }*/
+                }
+            }
+
+            let chart = new Chart(document.getElementById('chart').getContext('2d'), chartOptions);
+
+            Homey.ready();
+        }
+
+    </script>
+</body>
+
+</html>
