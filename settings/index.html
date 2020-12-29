@@ -128,7 +128,7 @@
             <!--splines tab begin-->
             <div class="card glass" style="margin-top: 10px;">
                 <div class="card-body">
-                    <p class="card-text">Some description goes here...</p>
+                    <p class="card-text">Create and edit your splines here and use them in your flow cards afterwards.</p>
 
                     <div class="row">
                         <div class="col-sm">
@@ -231,15 +231,15 @@
             });
 
             document.getElementById('createSplineModalButton').addEventListener('click', (e) => {
-                this.selectedSpline = { name: 'New Spline', vertices: [{ x: 0, y: 0 }, { x: 100, y: 0 }], id: null, minx: 0, miny: 0, maxx: 100, maxy: 25 };
+                this.selectedSpline = { name: 'New Spline', vertices: [{ x: 0, y: 0 }, { x: 50, y: 20 }, { x: 100, y: 0 }], id: null, minx: 0, miny: 0, maxx: 100, maxy: 25 };
                 renderSelectedSpline();
             });
 
             document.getElementById('splineName').addEventListener('input', (e) => { updateVertexForm(); renderSelectedSpline(); });
-            document.getElementById('minx').addEventListener('input', (e) => { updateVertexForm(); renderSelectedSpline(); });
-            document.getElementById('miny').addEventListener('input', (e) => { updateVertexForm(); renderSelectedSpline(); });
-            document.getElementById('maxx').addEventListener('input', (e) => { updateVertexForm(); renderSelectedSpline(); });
-            document.getElementById('maxy').addEventListener('input', (e) => { updateVertexForm(); renderSelectedSpline(); });
+            document.getElementById('minx').addEventListener('input', (e) => { updateBoundaries(); });
+            document.getElementById('miny').addEventListener('input', (e) => { updateBoundaries(); });
+            document.getElementById('maxx').addEventListener('input', (e) => { updateBoundaries(); });
+            document.getElementById('maxy').addEventListener('input', (e) => { updateBoundaries(); });
             document.getElementById('addVertexButton').addEventListener('click', (e) => { addVertex(); });
 
             function addVertex(x, y) {
@@ -266,16 +266,34 @@
                 });
             }
 
+            function updateBoundaries() {
+                const minx = parseInt(document.getElementById('minx').value);
+                const maxx = parseInt(document.getElementById('maxx').value);
+                const miny = parseInt(document.getElementById('miny').value);
+                const maxy = parseInt(document.getElementById('maxy').value);
+
+                if (minx < maxx && miny < maxy) {
+                    this.selectedSpline.minx = parseInt(document.getElementById('minx').value);
+                    this.selectedSpline.maxx = parseInt(document.getElementById('maxx').value);
+                    this.selectedSpline.miny = parseInt(document.getElementById('miny').value);
+                    this.selectedSpline.maxy = parseInt(document.getElementById('maxy').value);
+                }
+
+                this.selectedSpline.vertices[0].x = this.selectedSpline.minx;
+                this.selectedSpline.vertices[this.selectedSpline.vertices.length - 1].x = this.selectedSpline.maxx;
+
+                for (var i = 0; i < this.selectedSpline.vertices.length; i++) {
+                    this.selectedSpline.vertices[i].x = Math.max(Math.min(this.selectedSpline.vertices[i].x, this.selectedSpline.maxx), this.selectedSpline.minx);
+                    this.selectedSpline.vertices[i].y = Math.max(Math.min(this.selectedSpline.vertices[i].y, this.selectedSpline.maxy), this.selectedSpline.miny);
+                }
+
+                sortVertices();
+                renderSelectedSpline();
+            }
+
             function updateVertexForm() {
                 this.selectedSpline.name = document.getElementById('splineName').value;
-                this.selectedSpline.minx = parseInt(document.getElementById('minx').value);
-                this.selectedSpline.maxx = parseInt(document.getElementById('maxx').value);
-                this.selectedSpline.miny = parseInt(document.getElementById('miny').value);
-                this.selectedSpline.maxy = parseInt(document.getElementById('maxy').value);
-                //this.selectedHeaderCollection.description = document.getElementById('newHeaderCollectionDescription').value;
-
                 document.getElementById('newSplineSaveButton').disabled = this.selectedSpline.name.length < 3;
-                //document.getElementById('newHeaderItemSaveButton').disabled = document.getElementById('newHeaderItemName').value.length < 1;
             }
 
             function renderSelectedSpline() {
@@ -341,8 +359,6 @@
                 document.getElementById('maxy').value = this.selectedSpline.maxy;
 
                 chart.update();
-                //updateVertexForm();
-
                 document.getElementById('addVertexButton').disabled = this.selectedSpline.vertices.length > 30;
             }
 
