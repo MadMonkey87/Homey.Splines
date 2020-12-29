@@ -4,5 +4,8 @@
   "main": "app.js",
   "devDependencies": {
     "homey": "^2.9.3"
+  },
+  "dependencies": {
+    "cubic-spline": "^3.0.3"
   }
 }

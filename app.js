@@ -1,6 +1,7 @@
 'use strict';
 
 const Homey = require('homey');
+const Spline = require('cubic-spline');
 
 class SplinesApp extends Homey.App {
   async onInit() {
@@ -11,13 +12,26 @@ class SplinesApp extends Homey.App {
     let querySplineAction = new Homey.FlowCardAction('query_spline');
     querySplineAction
       .register()
-      .registerRunListener(async (args, state) => {
+      .registerRunListener((args, state) => {
         return new Promise((resolve) => {
-          const tokens = { result: args.value };
-          this.log('query completed ', tokens);
-          queryCompletedAction.trigger(tokens);
+          const splines = Homey.ManagerSettings.get('splines');
+          for (var i = 0; i < splines.length; i++) {
+            if (splines[i].id === args.spline.id) {
+              const xs = splines[i].vertices.map(v => v.x);
+              const ys = splines[i].vertices.map(v => v.y);
 
-          resolve(true);
+              const splineCalculator = new Spline(xs, ys);
+
+              const tokens = { result: splineCalculator.at(args.value) };
+              this.log('query completed ', tokens);
+              queryCompletedAction.trigger(tokens);
+
+              resolve(true);
+              break;
+            }
+          }
+          this.log('No spline found for ', args.state.id);
+          resolve(false);
         });
       });
 
