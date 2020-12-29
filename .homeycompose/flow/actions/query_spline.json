@@ -1,0 +1,28 @@
+{
+    "title": {
+        "en": "Query a spline"
+    },
+    "titleFormatted": {
+        "en": "Query [[spline]] at [[value]]"
+    },
+    "hint": {
+        "en": "Calculates the Y value of a given spline for a provided X value. The result is provided in a separate flow card."
+    },
+    "args": [
+        {
+            "type": "number",
+            "name": "value",
+            "title": {
+                "en": "Value - the 'X' value on the spline"
+            },
+            "placeholder": "0.75"
+        },
+        {
+            "type": "autocomplete",
+            "name": "spline",
+            "title": {
+                "en": "Spline - create a spline in the app config and select it here"
+            }
+        }
+    ]
+}

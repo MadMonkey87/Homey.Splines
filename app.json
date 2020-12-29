@@ -35,5 +35,114 @@
         "username": "madmonkey87"
       }
     }
+  },
+  "flow": {
+    "triggers": [
+      {
+        "title": {
+          "en": "Query completed"
+        },
+        "hint": {
+          "en": "Gets triggered when the 'Query a spline' flow card has completed it's calculation"
+        },
+        "args": [
+          {
+            "type": "dropdown",
+            "name": "tagHandling",
+            "title": {
+              "en": "Tag Handling"
+            },
+            "values": [
+              {
+                "id": "none",
+                "label": {
+                  "en": "None - gets triggered for all requests"
+                }
+              },
+              {
+                "id": "containsAny",
+                "label": {
+                  "en": "Contains Any - gets triggered if the request has at least one of the tags specified here"
+                }
+              },
+              {
+                "id": "containsAll",
+                "label": {
+                  "en": "Contains All - gets triggered if the request has all of the tags specified here"
+                }
+              },
+              {
+                "id": "containsNot",
+                "label": {
+                  "en": "Contains Not - gets triggered if the request does not contain any of the tags specified here"
+                }
+              }
+            ]
+          }
+        ],
+        "tokens": [
+          {
+            "name": "result",
+            "type": "number",
+            "title": {
+              "en": "Result - the Y value"
+            },
+            "example": 25
+          },
+          {
+            "type": "string",
+            "name": "tags",
+            "title": {
+              "en": "Tags"
+            },
+            "placeholder": {
+              "example": "tag1 tag2 tag3"
+            }
+          }
+        ],
+        "id": "query_completed"
+      }
+    ],
+    "actions": [
+      {
+        "title": {
+          "en": "Query a spline"
+        },
+        "titleFormatted": {
+          "en": "Query [[spline]] at [[value]]"
+        },
+        "hint": {
+          "en": "Calculates the Y value of a given spline for a provided X value. The result is provided in a separate flow card."
+        },
+        "args": [
+          {
+            "type": "number",
+            "name": "value",
+            "title": {
+              "en": "Value - the 'X' value on the spline"
+            },
+            "placeholder": "0.75"
+          },
+          {
+            "type": "autocomplete",
+            "name": "spline",
+            "title": {
+              "en": "Spline - create a spline in the app config and select it here"
+            }
+          },
+          {
+            "type": "text",
+            "name": "tags",
+            "title": {
+              "en": "Tags - used to identify this query in the 'on query completed' flow card. Use multiple tags by separating them with an space."
+            },
+            "placeholder": {
+              "en": "tag1 tag2 tag3"
+            }
+          }
+        ],
+        "id": "query_spline"
+      }
+    ]
   }
 }

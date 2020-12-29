@@ -1,0 +1,19 @@
+{
+    "title": {
+        "en": "Query completed"
+    },
+    "hint": {
+        "en": "Gets triggered when the 'Query a spline' flow card has completed it's calculation"
+    },
+    "args": [],
+    "tokens": [
+        {
+            "name": "result",
+            "type": "number",
+            "title": {
+                "en": "Result - the Y value"
+            },
+            "example": 25
+        }
+    ]
+}
