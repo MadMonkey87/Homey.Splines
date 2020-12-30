@@ -1,5 +1,5 @@
 Introduction
-Provides an UI to create Splines and some flow cards to query it. 
+Splines are two dimensional functions that can be very helpful for your home automation with Homey. Basically you can assign Y values (i.e brightness, volume,...) to an given X value (i.e time). The spline will then interpolate between these nodes. This app provides an UI that allows you to easily create/edit splines and it's visual representation and provides some flow cards that you can use in your automations to make use of these splines.
 
 Usage
  - Go to the app configuration and click on 'create'. Give the spline a name and setupo it's boundaries. Bellow you see a visual representation of the spline and you can also add/remove and modify the nodes. Bellow you find the exact values of the nodes.
