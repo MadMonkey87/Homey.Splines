@@ -36,8 +36,9 @@ class SplinesApp extends Homey.App {
               const ys = splines[i].vertices.map(v => v.y);
 
               const splineCalculator = new Spline(xs, ys);
+              const result = +splineCalculator.at(args.value).toFixed(5);
 
-              const tokens = { result: splineCalculator.at(args.value), value: args.value };
+              const tokens = { result: result, value: args.value };
               const state = { spline: args.spline.id };
               this.log('query completed ', tokens, state);
               queryCompletedAction.trigger(tokens, state);
@@ -75,12 +76,13 @@ class SplinesApp extends Homey.App {
                 const xs = splines[i].vertices.map(v => v.x);
                 const ys = splines[i].vertices.map(v => v.y);
 
-                const splineCalculator = new Spline(xs, ys);
-
                 const now = new Date();
                 const value = now.getHours() + (now.getMinutes() / 60) + (now.getSeconds() / 3600);
 
-                const tokens = { result: splineCalculator.at(value), value: value };
+                const splineCalculator = new Spline(xs, ys);
+                const result = +splineCalculator.at(value).toFixed(5);
+
+                const tokens = { result: result, value: value };
                 const state = { spline: args.spline.id };
                 this.log('time based query completed ', tokens, state);
                 queryCompletedAction.trigger(tokens, state);
