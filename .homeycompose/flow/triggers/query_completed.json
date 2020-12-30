@@ -5,7 +5,15 @@
     "hint": {
         "en": "Gets triggered when the 'Query a spline' flow card has completed it's calculation"
     },
-    "args": [],
+    "args": [
+        {
+            "type": "autocomplete",
+            "name": "spline",
+            "title": {
+                "en": "Spline - create a spline in the app config and select it here"
+            }
+        }
+    ],
     "tokens": [
         {
             "name": "result",
@@ -14,6 +22,14 @@
                 "en": "Result - the Y value"
             },
             "example": 25
+        },
+        {
+            "name": "value",
+            "type": "number",
+            "title": {
+                "en": "Query Value - the X value"
+            },
+            "example": 0.75
         }
     ]
 }

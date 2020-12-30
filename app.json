@@ -45,7 +45,15 @@
         "hint": {
           "en": "Gets triggered when the 'Query a spline' flow card has completed it's calculation"
         },
-        "args": [],
+        "args": [
+          {
+            "type": "autocomplete",
+            "name": "spline",
+            "title": {
+              "en": "Spline - create a spline in the app config and select it here"
+            }
+          }
+        ],
         "tokens": [
           {
             "name": "result",
@@ -54,6 +62,14 @@
               "en": "Result - the Y value"
             },
             "example": 25
+          },
+          {
+            "name": "value",
+            "type": "number",
+            "title": {
+              "en": "Query Value - the X value"
+            },
+            "example": 0.75
           }
         ],
         "id": "query_completed"
@@ -88,6 +104,27 @@
           }
         ],
         "id": "query_spline"
+      },
+      {
+        "title": {
+          "en": "Query a spline (time based)"
+        },
+        "titleFormatted": {
+          "en": "Query [[spline]] at current time of the day"
+        },
+        "hint": {
+          "en": "Calculates the Y value of a given spline depending on the current time of the day. The result is provided in a separate flow card.\n\nImportant: the min x of the spline must be 0 and the max x must be 24."
+        },
+        "args": [
+          {
+            "type": "autocomplete",
+            "name": "spline",
+            "title": {
+              "en": "Spline - create a spline in the app config and select it here"
+            }
+          }
+        ],
+        "id": "query_spline_time_based"
       }
     ]
   }
