@@ -19,17 +19,9 @@
             "name": "result",
             "type": "number",
             "title": {
-                "en": "Query Result - the Y value"
+                "en": "spline calculation result"
             },
             "example": 25
-        },
-        {
-            "name": "value",
-            "type": "number",
-            "title": {
-                "en": "Query Value - the X value"
-            },
-            "example": 0.75
         }
     ]
 }
