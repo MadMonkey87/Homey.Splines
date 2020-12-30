@@ -36,7 +36,7 @@ class SplinesApp extends Homey.App {
               const ys = splines[i].vertices.map(v => v.y);
 
               const splineCalculator = new Spline(xs, ys);
-              const result = +splineCalculator.at(args.value).toFixed(5);
+              const result = +splineCalculator.at(args.value).toFixed(2);
 
               const tokens = { result: result };
               const state = { spline: args.spline.id };
@@ -80,7 +80,7 @@ class SplinesApp extends Homey.App {
                 const value = now.getHours() + (now.getMinutes() / 60) + (now.getSeconds() / 3600);
 
                 const splineCalculator = new Spline(xs, ys);
-                const result = +splineCalculator.at(value).toFixed(5);
+                const result = +splineCalculator.at(value).toFixed(2);
 
                 const tokens = { result: result };
                 const state = { spline: args.spline.id };
