@@ -59,7 +59,7 @@
             "name": "result",
             "type": "number",
             "title": {
-              "en": "Result - the Y value"
+              "en": "Query Result - the Y value"
             },
             "example": 25
           },
