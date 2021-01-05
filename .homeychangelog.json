@@ -1,8 +1,5 @@
 {
-  "1.0.0": {
+  "1.1.1": {
     "en": "initial release"
-  },
-  "1.1.0": {
-    "en": "round results to 2 digits"
   }
 }
