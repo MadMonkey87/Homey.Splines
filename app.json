@@ -1,7 +1,7 @@
 {
   "_comment": "This file is generated. Please edit .homeycompose/app.json instead.",
   "id": "ch.philippewechsler.splines",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "compatibility": ">=4.0.0",
   "brandColor": "#00aaff",
   "sdk": 2,
@@ -9,7 +9,7 @@
     "en": "Splines"
   },
   "description": {
-    "en": "Provides an UI to create splines and some flow cards to make use of it."
+    "en": "Provides a UI to create Splines and integrate them in your Flows"
   },
   "category": [
     "tools"
