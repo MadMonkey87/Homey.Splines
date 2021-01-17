@@ -163,7 +163,7 @@
             <!--about tab begin-->
             <div class="card glass" style="margin-top: 10px;">
                 <div class="card-body">
-                    <h5 class="card-title">Splines for Homey v1.2.0</h5>
+                    <h5 class="card-title">Splines for Homey v1.3.0</h5>
                     <h3 class="card-title">© Philippe Wechsler 2021</h3>
                     <div>Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a>
                         from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
@@ -247,12 +247,12 @@
                 renderSelectedSpline();
             });
 
-            document.getElementById('splineName').addEventListener('input', (e) => { updateVertexForm(); renderSelectedSpline(); });
-            document.getElementById('minx').addEventListener('input', (e) => { updateBoundaries(); });
-            document.getElementById('miny').addEventListener('input', (e) => { updateBoundaries(); });
-            document.getElementById('maxx').addEventListener('input', (e) => { updateBoundaries(); });
-            document.getElementById('maxy').addEventListener('input', (e) => { updateBoundaries(); });
-            document.getElementById('round').addEventListener('input', (e) => { updateVertexForm(); updateBoundaries(); });
+            document.getElementById('splineName').addEventListener('blur', (e) => { updateVertexForm(); renderSelectedSpline(); });
+            document.getElementById('minx').addEventListener('blur', (e) => { updateBoundaries(); });
+            document.getElementById('miny').addEventListener('blur', (e) => { updateBoundaries(); });
+            document.getElementById('maxx').addEventListener('blur', (e) => { updateBoundaries(); });
+            document.getElementById('maxy').addEventListener('blur', (e) => { updateBoundaries(); });
+            document.getElementById('round').addEventListener('blur', (e) => { updateVertexForm(); updateBoundaries(); });
             document.getElementById('addVertexButton').addEventListener('click', (e) => { addVertex(); });
 
             function addVertex(x, y) {
