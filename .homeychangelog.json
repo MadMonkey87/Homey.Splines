@@ -4,5 +4,8 @@
   },
   "1.1.2": {
     "en": "initial release"
+  },
+  "1.2.0": {
+    "en": "fixed an issue where min/max values were not respected"
   }
 }
