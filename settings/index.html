@@ -99,6 +99,16 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label>Round results to digits (0-4)</label>
+                                        <div class="input-group">
+                                            <input type="number" class="form-control" id="round" min=0 max=4>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
                             <div class="row">
                                 <div class="col-sm">
@@ -233,7 +243,7 @@
             });
 
             document.getElementById('createSplineModalButton').addEventListener('click', (e) => {
-                this.selectedSpline = { name: 'New Spline', vertices: [{ x: 0, y: 0 }, { x: 50, y: 20 }, { x: 100, y: 0 }], id: null, minx: 0, miny: 0, maxx: 100, maxy: 25 };
+                this.selectedSpline = { name: 'New Spline', vertices: [{ x: 0, y: 0 }, { x: 50, y: 20 }, { x: 100, y: 0 }], id: null, minx: 0, miny: 0, maxx: 100, maxy: 25, digits: 2 };
                 renderSelectedSpline();
             });
 
@@ -242,6 +252,7 @@
             document.getElementById('miny').addEventListener('input', (e) => { updateBoundaries(); });
             document.getElementById('maxx').addEventListener('input', (e) => { updateBoundaries(); });
             document.getElementById('maxy').addEventListener('input', (e) => { updateBoundaries(); });
+            document.getElementById('round').addEventListener('input', (e) => { updateVertexForm(); updateBoundaries(); });
             document.getElementById('addVertexButton').addEventListener('click', (e) => { addVertex(); });
 
             function addVertex(x, y) {
@@ -286,7 +297,7 @@
 
                 for (var i = 0; i < this.selectedSpline.vertices.length; i++) {
                     this.selectedSpline.vertices[i].x = Math.max(Math.min(this.selectedSpline.vertices[i].x, this.selectedSpline.maxx), this.selectedSpline.minx);
-                    this.selectedSpline.vertices[i].y = Math.max(Math.min(this.selectedSpline.vertices[i].y, this.selectedSpline.maxy), this.selectedSpline.miny);
+                    this.selectedSpline.vertices[i].y = Math.max(Math.min(this.selectedSpline.vertices[i].y, this.selectedSpline.maxy), this.selectedSpline.miny).toFixed(this.selectedSpline.digits);
                 }
 
                 sortVertices();
@@ -295,6 +306,7 @@
 
             function updateVertexForm() {
                 this.selectedSpline.name = document.getElementById('splineName').value;
+                this.selectedSpline.digits = document.getElementById('round').value;
                 document.getElementById('newSplineSaveButton').disabled = this.selectedSpline.name.length < 3;
             }
 
@@ -330,7 +342,7 @@
                                 <div class="col-5">
                                     <div class="form-group">
                                         <div class="input-group">
-                                            <input type="number" class="form-control" value="${this.selectedSpline.vertices[i].y}" min="${this.selectedSpline.miny}" max="${this.selectedSpline.maxy}" onchange="changeVertexY(this.value, ${i})">
+                                            <input type="number" class="form-control" value="${this.selectedSpline.vertices[i].y}" step="${1 / (Math.pow(10, this.selectedSpline.digits))}" min="${this.selectedSpline.miny}" max="${this.selectedSpline.maxy}" onchange="changeVertexY(this.value, ${i})">
                                         </div>
                                     </div>
                                 </div>
@@ -352,10 +364,16 @@
                 chart.options.scales.xAxes[0].ticks.max = this.selectedSpline.maxx;
                 chart.options.scales.yAxes[0].ticks.min = this.selectedSpline.miny;
                 chart.options.scales.yAxes[0].ticks.max = this.selectedSpline.maxy;
+
+                chart.options.scales.yAxes[0].ticks.stepSize = 1 / (Math.pow(10, this.selectedSpline.digits));
+
+                chart.data.datasets[0].steppedLine = chart.options.scales.yAxes[0].ticks.stepSize == 1 ? 'middle' : false;
+
                 document.getElementById('minx').value = this.selectedSpline.minx;
                 document.getElementById('miny').value = this.selectedSpline.miny;
                 document.getElementById('maxx').value = this.selectedSpline.maxx;
                 document.getElementById('maxy').value = this.selectedSpline.maxy;
+                document.getElementById('round').value = this.selectedSpline.digits;
 
                 chart.update();
                 document.getElementById('addVertexButton').disabled = this.selectedSpline.vertices.length > 30;
@@ -388,9 +406,9 @@
             function loadSplines() {
                 if (Homey.isMock) {
                     splines = [];
-                    splines.push({ id: '1', name: "sample spline 1", minx: 0, miny: 0, maxx: 1, maxy: 1, vertices: [{ x: 0, y: 0 }, { x: 0.25, y: 1 }, { x: 0.75, y: 0.1 }, { x: 1, y: 0.75 }] });
-                    splines.push({ id: '2', name: "sample spline 2", minx: 0, miny: 0, maxx: 1, maxy: 1, vertices: [{ x: 0, y: 0 }, { x: 0.25, y: 1 }, { x: 0.75, y: 0.1 }, { x: 1, y: 0.75 }] });
-                    splines.push({ id: '3', name: "sample spline 3", minx: 0, miny: 0, maxx: 1, maxy: 1, vertices: [{ x: 0, y: 0 }, { x: 0.25, y: 1 }, { x: 0.75, y: 0.1 }, { x: 1, y: 0.75 }] });
+                    splines.push({ id: '1', name: "sample spline 1", digits: 2, minx: 0, miny: 0, maxx: 1, maxy: 1, vertices: [{ x: 0, y: 0 }, { x: 0.25, y: 1 }, { x: 0.75, y: 0.1 }, { x: 1, y: 0.75 }] });
+                    splines.push({ id: '2', name: "sample spline 2", digits: 2, minx: 0, miny: 0, maxx: 1, maxy: 1, vertices: [{ x: 0, y: 0 }, { x: 0.25, y: 1 }, { x: 0.75, y: 0.1 }, { x: 1, y: 0.75 }] });
+                    splines.push({ id: '3', name: "sample spline 3", digits: 2, minx: 0, miny: 0, maxx: 1, maxy: 1, vertices: [{ x: 0, y: 0 }, { x: 0.25, y: 1 }, { x: 0.75, y: 0.1 }, { x: 1, y: 0.75 }] });
                     renderSplines();
                 } else {
                     Homey.get('splines', (err, result) => {
@@ -420,9 +438,8 @@
                             pointHoverBorderWidth: 3,
                             pointHoverBorderColor: 'rgb(0, 170, 255)',
                             pointHoverBackgroundColor: 'rgb(0,191,255)',
-                            cubicInterpolationMode: 'monotone',
                             pointHitRadius: 25,
-                            data: [],
+                            data: []
                         }
                     ]
                 },
@@ -471,8 +488,7 @@
                             value.x = this.selectedSpline.maxx;
                         }
                         this.selectedSpline.vertices[index] = value;
-                        sortVertices();
-                        renderSelectedSpline();
+                        updateBoundaries();
                     }
                 }
             }

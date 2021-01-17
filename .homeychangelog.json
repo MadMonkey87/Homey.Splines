@@ -6,6 +6,6 @@
     "en": "initial release"
   },
   "1.2.0": {
-    "en": "fixed an issue where min/max values were not respected"
+    "en": "fixed an issue where min/max values were not respected, option to manually set the amount of digits of the result"
   }
 }
