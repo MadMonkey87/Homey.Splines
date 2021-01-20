@@ -9,6 +9,6 @@
     "en": "fixed an issue where min/max values were not respected, option to manually set the amount of digits of the result, improved homey v4.x compatibility"
   },
   "1.3.0": {
-    "en": "small fixes and improvements"
+    "en": "Live testing, small fixes and improvements"
   }
 }

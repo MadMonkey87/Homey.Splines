@@ -16,10 +16,17 @@
         crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>
     <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-annotation/0.5.7/chartjs-plugin-annotation.min.js"></script>
+    <script
         src="https://cdn.jsdelivr.net/npm/chartjs-plugin-dragdata@latest/dist/chartjs-plugin-dragdata.min.js"></script>
+
     <link rel="stylesheet" href="css/bootstrap.css">
     <link rel="stylesheet" href="css/animation.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/11.0.2/bootstrap-slider.min.js"></script>
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/11.0.2/css/bootstrap-slider.min.css">
 </head>
 
 <body>
@@ -120,6 +127,27 @@
                                     </canvas>
                                 </div>
                             </div>
+
+                            <div class="row">
+                                <div class="col-sm">
+                                    <div class="form-group">
+                                        <label>Live testing</label>
+                                        <p style="font-style: italic;">Use the slider bellow to trigger the related flow
+                                            cards and test the spline in real time</p>
+                                        <div class="input-group">
+                                            <input type="text" id="livetesting" style="width: 100%;">
+                                        </div>
+                                        <button type="button" class="btn btn-primary float-right" id="livetestingbutton"
+                                            style="width: 42px; height: 42px">
+                                            <span class="fa fa-refresh"></span>
+                                        </button>
+                                    </div>
+
+
+                                </div>
+                            </div>
+
+
 
                             <ul class="list-group list-group-flush" id="splineVertices">
                             </ul>
@@ -254,6 +282,17 @@
             document.getElementById('maxy').addEventListener('blur', (e) => { updateBoundaries(); });
             document.getElementById('round').addEventListener('blur', (e) => { updateVertexForm(); updateBoundaries(); });
             document.getElementById('addVertexButton').addEventListener('click', (e) => { addVertex(); });
+
+            var slider = new Slider('#livetesting', {
+                min: "0",
+                max: "100",
+                step: "0.1",
+                tooltip: "hide"
+            });
+            slider.on("slideStop", function (sliderValue) {
+                liveTest(sliderValue);
+            });
+            document.getElementById('livetestingbutton').addEventListener('click', (e) => { alert(slider.getValue(liveTest(sliderValue))); });
 
             function addVertex(x, y) {
                 if (!x) {
@@ -395,6 +434,14 @@
             }
 
             // utils
+
+            function liveTest(value) {
+                Homey.api('POST', '/liveTest', { ...this.selectedSpline, value: value }, function (err, result) {
+                    if (err) {
+                        Homey.alert('Live testing failed');
+                    }
+                })
+            }
 
             function generateGuid() {
                 return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {

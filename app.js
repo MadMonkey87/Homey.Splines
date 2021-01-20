@@ -19,13 +19,13 @@ class SplinesApp extends Homey.App {
     }
     Homey.ManagerSettings.set('splines', splines);
 
-    let queryCompletedAction = new Homey.FlowCardTrigger('query_completed')
+    this.queryCompletedAction = new Homey.FlowCardTrigger('query_completed')
       .registerRunListener((args, state) => {
         return Promise.resolve(args.spline.id === state.spline);
       })
       .register();
 
-    queryCompletedAction.getArgument('spline')
+    this.queryCompletedAction.getArgument('spline')
       .registerAutocompleteListener((query, args) => {
         return new Promise((resolve) => {
           let splines = Homey.ManagerSettings.get('splines');
@@ -53,7 +53,7 @@ class SplinesApp extends Homey.App {
               const tokens = { result: result };
               const state = { spline: args.spline.id };
               this.log('query completed ', tokens, state);
-              queryCompletedAction.trigger(tokens, state);
+              this.queryCompletedAction.trigger(tokens, state);
 
               resolve(true);
               break;
@@ -98,7 +98,7 @@ class SplinesApp extends Homey.App {
                 const tokens = { result: result };
                 const state = { spline: args.spline.id };
                 this.log('time based query completed ', tokens, state);
-                queryCompletedAction.trigger(tokens, state);
+                this.queryCompletedAction.trigger(tokens, state);
 
                 resolve(true);
 
@@ -124,6 +124,29 @@ class SplinesApp extends Homey.App {
         });
       });
   }
+
+  liveTest(spline, callback) {
+    this.log('live testing ', spline);
+    try {
+      const xs = spline.vertices.map(v => v.x);
+      const ys = spline.vertices.map(v => v.y);
+
+      const value = spline.value / 100 * (spline.maxx - spline.minx);
+
+      const splineCalculator = new Spline(xs, ys);
+      const result = util.clamp(+splineCalculator.at(value).toFixed(spline.digits), spline.miny, spline.maxy);
+
+      const tokens = { result: result };
+      const state = { spline: spline.id };
+      this.log('live testing query completed ', tokens, state);
+      this.queryCompletedAction.trigger(tokens, state);
+      callback(null, result);
+    } catch (error) {
+      this.log('live testing failed', error);
+      callback(error, null);
+    }
+  }
+
 }
 
 module.exports = SplinesApp;
