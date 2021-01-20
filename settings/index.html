@@ -272,6 +272,7 @@
 
             document.getElementById('createSplineModalButton').addEventListener('click', (e) => {
                 this.selectedSpline = { name: 'New Spline', vertices: [{ x: 0, y: 0 }, { x: 50, y: 20 }, { x: 100, y: 0 }], id: null, minx: 0, miny: 0, maxx: 100, maxy: 25, digits: 2 };
+                slider.setValue(0);
                 renderSelectedSpline();
             });
 
@@ -296,6 +297,7 @@
             slider.on("slide", function (sliderValue) {
                 chart.options.annotation.annotations[0].value = sliderValue / 100 * (this.selectedSpline.maxx - this.selectedSpline.minx);
                 chart.options.annotation.annotations[0].borderColor = 'rgba(108, 117, 125,0.35)';
+                chart.options.annotation.annotations[0].label.content = (sliderValue / 100 * (this.selectedSpline.maxx - this.selectedSpline.minx)).toFixed(2);
                 chart.update();
             });
             document.getElementById('livetestingbutton').addEventListener('click', (e) => {
@@ -417,6 +419,10 @@
                 chart.options.scales.yAxes[0].ticks.stepSize = 1 / (Math.pow(10, this.selectedSpline.digits));
 
                 chart.data.datasets[0].steppedLine = chart.options.scales.yAxes[0].ticks.stepSize == 1 ? 'middle' : false;
+
+                chart.options.annotation.annotations[0].value = slider.getValue() / 100 * (this.selectedSpline.maxx - this.selectedSpline.minx);
+                chart.options.annotation.annotations[0].borderColor = 'rgba(108, 117, 125,0.35)';
+                chart.options.annotation.annotations[0].label.content = (slider.getValue() / 100 * (this.selectedSpline.maxx - this.selectedSpline.minx)).toFixed(2);
 
                 document.getElementById('minx').value = this.selectedSpline.minx;
                 document.getElementById('miny').value = this.selectedSpline.miny;
@@ -543,9 +549,9 @@
                             borderColor: 'rgba(108, 117, 125,0.75)',
                             borderWidth: 5,
                             label: {
-                                enabled: false,
+                                enabled: true,
                                 position: 'center',
-                                content: 'live testing'
+                                content: ''
                             },
                             draggable: true,
                             onDrag: function (event) {
