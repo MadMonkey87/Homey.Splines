@@ -5,9 +5,6 @@
     "hint": {
         "en": "Calculates the Y value of a given spline for a provided X value. The result is provided in a separate flow card."
     },
-    "titleFormatted": {
-        "en": "Query [[spline]] at [[value]]"
-    },
     "args": [
         {
             "type": "number",

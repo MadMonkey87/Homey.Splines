@@ -5,7 +5,8 @@
     <!--<script src='https://cdn.staticaly.com/gh/robertklep/homey-mocks/v0.0.4/homey-settings-mock.js'></script>-->
     <!--<script src="js/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
         <script src="js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>-->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+
+    <!--<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
         integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
         crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
@@ -25,7 +26,21 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/11.0.2/bootstrap-slider.min.js"></script>
     <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/11.0.2/css/bootstrap-slider.min.css">
+        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/11.0.2/css/bootstrap-slider.min.css">-->
+
+    <script src="js/jquery-3.5.1.slim.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/Chart.min.js"></script>
+    <script src="js/chartjs-plugin-annotation.min.js"></script>
+    <script src="js/chartjs-plugin-dragdata.min.js"></script>
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/animation.css">
+    <link rel="stylesheet" href="css/font-awesome.min.css">
+
+    <script src="js/bootstrap-slider.min.js"></script>
+    <link rel="stylesheet" href="css/bootstrap-slider.min.css">
+
 </head>
 
 <body>
@@ -191,7 +206,7 @@
             <!--about tab begin-->
             <div class="card glass" style="margin-top: 10px;">
                 <div class="card-body">
-                    <h5 class="card-title">Splines for Homey v1.3.0</h5>
+                    <h5 class="card-title">Splines for Homey v1.3.1</h5>
                     <h3 class="card-title">© Philippe Wechsler 2021</h3>
                     <div>Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a>
                         from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
@@ -458,6 +473,7 @@
                         chart.update();
                     } else {
                         chart.options.annotation.annotations[0].borderColor = 'rgba(108, 117, 125,0.75)';
+                        chart.options.annotation.annotations[0].label.content += "➞" + result;
                         chart.update();
                     }
                 })
@@ -506,7 +522,9 @@
                             pointHoverBorderColor: 'rgb(0, 170, 255)',
                             pointHoverBackgroundColor: 'rgb(0,191,255)',
                             pointHitRadius: 25,
-                            data: []
+                            data: [],
+                            cubicInterpolationMode: 'monotone',
+                            lineTension: 0.5
                         }
                     ]
                 },
