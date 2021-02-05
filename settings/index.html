@@ -134,7 +134,7 @@
                             <div class="row">
                                 <div class="col-sm">
                                     <button type="button" class="btn btn-primary float-right" id="addVertexButton"
-                                        style="width: 42px; height: 42px">
+                                        style="width: 42px !important; height: 42px !important">
                                         <span class="fa fa-plus"></span>
                                     </button>
                                     <canvas id="chart" width="400" height="400">
@@ -153,7 +153,7 @@
                                             <input type="text" id="livetesting" style="width: 100%;">
                                         </div>
                                         <button type="button" class="btn btn-primary float-right" id="livetestingbutton"
-                                            style="width: 42px; height: 42px">
+                                            style="width: 42px !important; height: 42px !important">
                                             <span class="fa fa-refresh"></span>
                                         </button>
                                     </div>
@@ -219,7 +219,7 @@
                         <div class="sk-cube sk-cube8"></div>
                         <div class="sk-cube sk-cube9"></div>
                     </div>
-                    <h5 class="card-title">Splines for Homey v1.3.1</h5>
+                    <h5 class="card-title">Splines for Homey v1.4.0</h5>
                     <h3 class="card-title">© Philippe Wechsler 2021</h3>
                     <div>Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a>
                         from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
@@ -248,15 +248,20 @@
                     collectionMarkup += `
                         <li class="list-group-item transparent">
                             <div class="form-group">
-                                <button type="button" class="btn btn-secondary float-right" style="margin-top: 5px; height: 42px; width: 42px"><span
-                                        class="fa fa-trash" onclick="removeSpline(${i})"></span></button>
-                                <button type="button" class="btn btn-primary float-right" style="margin-top: 5px; height: 42px; width: 42px" data-toggle="modal" data-target="#createSplineModal" onclick="editSpline(${i})"><span
-                                        class="fa fa-edit"></span></button>
                                 <label style="font-weight: bold; font-size: 18px; margin-top: 5px">${splines[i].name}</label>
+                                <div class="btn-group float-right" style="margin-bottom: 5px" >
+                                    <button type="button" class="btn btn-primary" style="margin-top: 5px; height: 42px !important; width: 42px !important" data-toggle="modal" data-target="#createSplineModal" onclick="editSpline(${i})"><span
+                                            class="fa fa-edit"></span></button>
+                                    <button type="button" class="btn btn-secondary" style="margin-top: 5px; height: 42px !important; width: 42px !important" onclick="duplicateSpline(${i})"><span
+                                            class="fa fa-clone"></span></button>
+                                    <button type="button" class="btn btn-secondary" style="margin-top: 5px; height: 42px !important; width: 42px !important"><span
+                                            class="fa fa-trash" onclick="removeSpline(${i})"></span></button>
+                                </div>
                             </div>
                         </li>
                     `;
                 }
+
                 document.getElementById('splineCollection').innerHTML = collectionMarkup;
             }
 
@@ -269,6 +274,12 @@
             window.editSpline = function (e) {
                 this.selectedSpline = { ...splines[e], vertices: [...splines[e].vertices] };
                 renderSelectedSpline();
+            }
+
+            window.duplicateSpline = function (e) {
+                const newSpline = { ...splines[e], vertices: [...splines[e].vertices], name: splines[e].name + ' Copy', id: generateGuid() };
+                splines.push(newSpline);
+                persistSplines();
             }
 
             persistSplines = function () {
@@ -427,7 +438,7 @@
                                 </div>
                                 <div class="col-2">
                                     <div class="form-group">
-                                        <button type="button" ${(i == 0 || i + 1 == this.selectedSpline.vertices.length) ? 'disabled' : ''} class="btn btn-secondary float-right" style="width: 42px; height: 42px" onclick="removeVertex(${i})">
+                                        <button type="button" ${(i == 0 || i + 1 == this.selectedSpline.vertices.length) ? 'disabled' : ''} class="btn btn-secondary float-right" style="width: 42px !important; height: 42px !important" onclick="removeVertex(${i})">
                                             <span class="fa fa-trash"></span>
                                         </button>
                                     </div>
@@ -451,6 +462,15 @@
                 chart.options.annotation.annotations[0].value = slider.getValue() / 100 * (this.selectedSpline.maxx - this.selectedSpline.minx);
                 chart.options.annotation.annotations[0].borderColor = 'rgba(108, 117, 125,0.35)';
                 chart.options.annotation.annotations[0].label.content = (slider.getValue() / 100 * (this.selectedSpline.maxx - this.selectedSpline.minx)).toFixed(2);
+
+                let chartHeight = document.getElementById('chart').clientHeight;
+                if (chartHeight == 0) {
+                    chartHeight = 400;
+                }
+                var gradient = document.getElementById('chart').getContext('2d').createLinearGradient(0, 0, 0, chartHeight);
+                gradient.addColorStop(1, 'rgba(0, 191, 255, 0)');
+                gradient.addColorStop(0.25, 'rgba(0, 191, 255, 0.85)');
+                chart.data.datasets[0].backgroundColor = gradient;
 
                 document.getElementById('minx').value = this.selectedSpline.minx;
                 document.getElementById('miny').value = this.selectedSpline.miny;
@@ -486,7 +506,7 @@
                         chart.update();
                     } else {
                         chart.options.annotation.annotations[0].borderColor = 'rgba(108, 117, 125,0.75)';
-                        chart.options.annotation.annotations[0].label.content += "➞" + result;
+                        chart.options.annotation.annotations[0].label.content = value + "➞" + result;
                         chart.update();
                     }
                 })
@@ -523,16 +543,15 @@
                     datasets: [
                         {
                             showLine: true,
-                            borderColor: 'rgb(0, 170, 255)',
+                            borderColor: 'rgb(108, 117, 125)',
                             borderWidth: 3,
-                            backgroundColor: 'rgba(0,191,255,0.35)',
                             pointRadius: 5,
                             pointBackgroundColor: 'rgb(0,191,255)',
-                            pointBorderColor: 'rgb(0, 170, 255)',
+                            pointBorderColor: 'rgb(108, 117, 125)',
                             pointBorderWidth: 3,
                             pointHoverRadius: 10,
                             pointHoverBorderWidth: 3,
-                            pointHoverBorderColor: 'rgb(0, 170, 255)',
+                            pointHoverBorderColor: 'rgb(108, 117, 125)',
                             pointHoverBackgroundColor: 'rgb(0,191,255)',
                             pointHitRadius: 25,
                             data: [],
