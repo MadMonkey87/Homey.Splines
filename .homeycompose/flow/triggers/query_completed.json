@@ -5,6 +5,9 @@
     "hint": {
         "en": "Gets triggered when the 'Query a spline' flow card has completed it's calculation"
     },
+    "titleFormatted": {
+        "en": "When the querying of [[spline]] has finished"
+    },
     "args": [
         {
             "type": "autocomplete",

@@ -36,6 +36,7 @@
       }
     }
   },
+  "source": "https://github.com/MadMonkey87/Homey.InsightTrends",
   "homeyCommunityTopicId": 40884,
   "flow": {
     "triggers": [
@@ -45,6 +46,9 @@
         },
         "hint": {
           "en": "Gets triggered when the 'Query a spline' flow card has completed it's calculation"
+        },
+        "titleFormatted": {
+          "en": "When the querying of [[spline]] has finished"
         },
         "args": [
           {
@@ -76,7 +80,17 @@
         "hint": {
           "en": "Calculates the Y value of a given spline for a provided X value. The result is provided in a separate flow card."
         },
+        "titleFormatted": {
+          "en": "Query [[spline]] at [[value]]"
+        },
         "args": [
+          {
+            "type": "autocomplete",
+            "name": "spline",
+            "title": {
+              "en": "Spline - create a spline in the app config and select it here"
+            }
+          },
           {
             "type": "number",
             "name": "value",
@@ -84,13 +98,6 @@
               "en": "Value - the 'X' value on the spline"
             },
             "placeholder": "0.75"
-          },
-          {
-            "type": "autocomplete",
-            "name": "spline",
-            "title": {
-              "en": "Spline - create a spline in the app config and select it here"
-            }
           }
         ],
         "id": "query_spline"
@@ -101,6 +108,9 @@
         },
         "hint": {
           "en": "Calculates the Y value of a given spline depending on the current time of the day. The result is provided in a separate flow card."
+        },
+        "titleFormatted": {
+          "en": "Query [[spline]] based on the current time"
         },
         "args": [
           {

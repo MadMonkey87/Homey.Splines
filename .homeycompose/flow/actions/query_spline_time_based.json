@@ -5,6 +5,9 @@
     "hint": {
         "en": "Calculates the Y value of a given spline depending on the current time of the day. The result is provided in a separate flow card."
     },
+    "titleFormatted": {
+        "en": "Query [[spline]] based on the current time"
+    },
     "args": [
         {
             "type": "autocomplete",
