@@ -1,6 +1,6 @@
 {
   "id": "ch.philippewechsler.splines",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "compatibility": ">=4.0.0",
   "brandColor": "#00aaff",
   "sdk": 2,

@@ -16,5 +16,8 @@
   },
   "1.4.0": {
     "en": "Small fixes, duplicate a spline"
+  },
+  "1.4.1": {
+    "en": "Small UI improvement"
   }
 }
