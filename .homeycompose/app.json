@@ -2,7 +2,7 @@
   "id": "ch.philippewechsler.splines",
   "version": "1.4.1",
   "compatibility": ">=4.0.0",
-  "brandColor": "#00aaff",
+  "brandColor": "#004a46",
   "sdk": 2,
   "name": {
     "en": "Splines"
