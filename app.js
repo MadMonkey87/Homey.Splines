@@ -10,25 +10,24 @@ class SplinesApp extends Homey.App {
     this.log('SplinesApp has been initialized');
 
     // migrate if necessary
-    let splines = Homey.ManagerSettings.get('splines');
+    let splines = this.homey.settings.get('splines');
     for (var i = 0; i < splines.length; i++) {
       if (!splines[i].digits) {
         this.log('Set digits for ' + splines[i].id);
         splines[i].digits = 2;
       }
     }
-    Homey.ManagerSettings.set('splines', splines);
+    this.homey.settings.set('splines', splines);
 
-    this.queryCompletedAction = new Homey.FlowCardTrigger('query_completed')
+    this.queryCompletedAction = this.homey.flow.getTriggerCard('query_completed')
       .registerRunListener((args, state) => {
         return Promise.resolve(args.spline.id === state.spline);
-      })
-      .register();
+      });
 
     this.queryCompletedAction.getArgument('spline')
       .registerAutocompleteListener((query, args) => {
         return new Promise((resolve) => {
-          let splines = Homey.ManagerSettings.get('splines');
+          let splines = this.homey.settings.get('splines');
           if (splines == undefined || splines === null) {
             splines = [];
           }
@@ -36,12 +35,11 @@ class SplinesApp extends Homey.App {
         });
       });
 
-    let querySplineAction = new Homey.FlowCardAction('query_spline');
+    let querySplineAction = this.homey.flow.getActionCard('query_spline');
     querySplineAction
-      .register()
       .registerRunListener((args, state) => {
         return new Promise((resolve) => {
-          const splines = Homey.ManagerSettings.get('splines');
+          const splines = this.homey.settings.get('splines');
           for (var i = 0; i < splines.length; i++) {
             if (splines[i].id === args.spline.id) {
               const xs = splines[i].vertices.map(v => v.x);
@@ -67,7 +65,7 @@ class SplinesApp extends Homey.App {
     querySplineAction.getArgument('spline')
       .registerAutocompleteListener((query, args) => {
         return new Promise((resolve) => {
-          let splines = Homey.ManagerSettings.get('splines');
+          let splines = this.homey.settings.get('splines');
           if (splines == undefined || splines === null) {
             splines = [];
           }
@@ -75,12 +73,11 @@ class SplinesApp extends Homey.App {
         });
       });
 
-    let querySplineTimeBasedAction = new Homey.FlowCardAction('query_spline_time_based');
+    let querySplineTimeBasedAction = this.homey.flow.getActionCard('query_spline_time_based');
     querySplineTimeBasedAction
-      .register()
       .registerRunListener((args, state) => {
         return new Promise((resolve) => {
-          const splines = Homey.ManagerSettings.get('splines');
+          const splines = this.homey.settings.get('splines');
           for (var i = 0; i < splines.length; i++) {
             if (splines[i].id === args.spline.id) {
 
@@ -117,7 +114,7 @@ class SplinesApp extends Homey.App {
     querySplineTimeBasedAction.getArgument('spline')
       .registerAutocompleteListener((query, args) => {
         return new Promise((resolve) => {
-          let splines = Homey.ManagerSettings.get('splines');
+          let splines = this.homey.settings.get('splines');
           if (splines == undefined || splines === null) {
             splines = [];
           }
@@ -126,7 +123,7 @@ class SplinesApp extends Homey.App {
       });
   }
 
-  liveTest(spline, callback) {
+  liveTest(spline) {
     this.log('live testing ', spline);
     try {
       const xs = spline.vertices.map(v => v.x);
@@ -141,10 +138,10 @@ class SplinesApp extends Homey.App {
       const state = { spline: spline.id };
       this.log('live testing query completed ', tokens, state);
       this.queryCompletedAction.trigger(tokens, state);
-      callback(null, result);
+      return { error: null, result: result };
     } catch (error) {
       this.log('live testing failed', error);
-      callback(error, null);
+      return { error: error, result: null };
     }
   }
 

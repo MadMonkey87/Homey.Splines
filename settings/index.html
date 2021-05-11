@@ -181,22 +181,25 @@
             <!--splines tab begin-->
             <div class="card glass" style="margin-top: 10px;">
 
-                <div class="loading" id="loading">
-                    <div class="sk-cube-grid">
-                        <div class="sk-cube sk-cube1"></div>
-                        <div class="sk-cube sk-cube2"></div>
-                        <div class="sk-cube sk-cube3"></div>
-                        <div class="sk-cube sk-cube4"></div>
-                        <div class="sk-cube sk-cube5"></div>
-                        <div class="sk-cube sk-cube6"></div>
-                        <div class="sk-cube sk-cube7"></div>
-                        <div class="sk-cube sk-cube8"></div>
-                        <div class="sk-cube sk-cube9"></div>
-                    </div>
-                </div>
+
 
 
                 <div class="card-body">
+
+                    <div class="loading" id="loading">
+                        <div class="sk-cube-grid">
+                            <div class="sk-cube sk-cube1"></div>
+                            <div class="sk-cube sk-cube2"></div>
+                            <div class="sk-cube sk-cube3"></div>
+                            <div class="sk-cube sk-cube4"></div>
+                            <div class="sk-cube sk-cube5"></div>
+                            <div class="sk-cube sk-cube6"></div>
+                            <div class="sk-cube sk-cube7"></div>
+                            <div class="sk-cube sk-cube8"></div>
+                            <div class="sk-cube sk-cube9"></div>
+                        </div>
+                    </div>
+
                     <p class="card-text">Create and edit your splines here and use them in your flow cards afterwards.
                     </p>
 
@@ -235,7 +238,7 @@
                         <div class="sk-cube sk-cube8"></div>
                         <div class="sk-cube sk-cube9"></div>
                     </div>
-                    <h5 class="card-title">Splines for Homey v1.4.1</h5>
+                    <h5 class="card-title">Splines for Homey v2.0.0</h5>
                     <h3 class="card-title">© Philippe Wechsler 2021</h3>
                     <div>Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a>
                         from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
@@ -272,8 +275,8 @@
                                             class="fa fa-edit"></span></button>
                                     <button type="button" class="btn btn-secondary" style="margin-top: 5px; height: 42px !important; width: 42px !important" onclick="duplicateSpline(${i})"><span
                                             class="fa fa-clone"></span></button>
-                                    <button type="button" class="btn btn-secondary" style="margin-top: 5px; height: 42px !important; width: 42px !important"><span
-                                            class="fa fa-trash" onclick="removeSpline(${i})"></span></button>
+                                    <button type="button" class="btn btn-secondary" style="margin-top: 5px; height: 42px !important; width: 42px !important" onclick="removeSpline(${i})"><span
+                                            class="fa fa-trash"></span></button>
                                 </div>
                             </div>
                         </li>
@@ -285,9 +288,13 @@
             }
 
             window.removeSpline = function (e) {
-                loading.style.display = 'initial';
-                splines.splice(e, 1);
-                persistSplines();
+                Homey.confirm('Do you want to delete the spline?', 'warning', (e1, e2) => {
+                    if (e2 === true) {
+                        loading.style.display = 'initial';
+                        splines.splice(e, 1);
+                        persistSplines();
+                    }
+                });
             }
 
             window.editSpline = function (e) {
@@ -521,12 +528,12 @@
 
             function liveTest(value) {
                 Homey.api('POST', '/liveTest', { ...this.selectedSpline, value: value }, function (err, result) {
-                    if (err) {
+                    if (err || result.error) {
                         chart.options.annotation.annotations[0].borderColor = 'rgba(255, 0, 0,0.85)';
                         chart.update();
                     } else {
                         chart.options.annotation.annotations[0].borderColor = 'rgba(108, 117, 125,0.75)';
-                        chart.options.annotation.annotations[0].label.content = value + "➞" + result;
+                        chart.options.annotation.annotations[0].label.content = value + "➞" + result.result;
                         chart.update();
                     }
                 })

@@ -19,5 +19,8 @@
   },
   "1.4.1": {
     "en": "Small UI improvement"
+  },
+  "2.0.0": {
+    "en": "Upgrade to SDK v3, confirmation required for deleting a spline"
   }
 }

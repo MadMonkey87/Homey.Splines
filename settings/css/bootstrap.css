@@ -9096,3 +9096,7 @@ label{
   background-color: rgb(106, 115, 122) !important;
   background-image: none !important;
 }
+
+.card-body.loading{
+  margin-top: 25%;
+}

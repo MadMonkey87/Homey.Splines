@@ -1,9 +1,9 @@
 {
   "id": "ch.philippewechsler.splines",
-  "version": "1.4.1",
-  "compatibility": ">=4.0.0",
+  "version": "2.0.0",
+  "compatibility": ">=5.0.0",
   "brandColor": "#004a46",
-  "sdk": 2,
+  "sdk": 3,
   "name": {
     "en": "Splines"
   },
@@ -35,6 +35,12 @@
       }
     }
   },
-  "source": "https://github.com/MadMonkey87/Homey.InsightTrends",
-  "homeyCommunityTopicId": 40884
+  "source": "https://github.com/MadMonkey87/Homey.Splines",
+  "homeyCommunityTopicId": 40884,
+  "api": {
+    "liveTest": {
+      "method": "post",
+      "path": "/liveTest"
+    }
+  }
 }
