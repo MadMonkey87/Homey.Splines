@@ -36,13 +36,7 @@ class SplinesApp extends Homey.App {
 
     this.queryCompletedTrigger.getArgument('spline')
       .registerAutocompleteListener((query, args) => {
-        return new Promise((resolve) => {
-          let splines = this.homey.settings.get('splines');
-          if (splines == undefined || splines === null) {
-            splines = [];
-          }
-          resolve(splines);
-        });
+        return this.splineAutocompleteListener(query, args);
       });
 
     let querySplineCondition = this.homey.flow.getConditionCard('query_spline_condition');
@@ -76,13 +70,7 @@ class SplinesApp extends Homey.App {
 
     querySplineCondition.getArgument('spline')
       .registerAutocompleteListener((query, args) => {
-        return new Promise((resolve) => {
-          let splines = this.homey.settings.get('splines');
-          if (splines == undefined || splines === null) {
-            splines = [];
-          }
-          resolve(splines);
-        });
+        return this.splineAutocompleteListener(query, args);
       });
 
     let querySplineTimeBasedCondition = this.homey.flow.getConditionCard('query_spline_time_based_condition');
@@ -125,13 +113,7 @@ class SplinesApp extends Homey.App {
 
     querySplineTimeBasedCondition.getArgument('spline')
       .registerAutocompleteListener((query, args) => {
-        return new Promise((resolve) => {
-          let splines = this.homey.settings.get('splines');
-          if (splines == undefined || splines === null) {
-            splines = [];
-          }
-          resolve(splines);
-        });
+        return this.splineAutocompleteListener(query, args);
       });
 
     let querySplineAction = this.homey.flow.getActionCard('query_spline');
@@ -165,13 +147,7 @@ class SplinesApp extends Homey.App {
 
     querySplineAction.getArgument('spline')
       .registerAutocompleteListener((query, args) => {
-        return new Promise((resolve) => {
-          let splines = this.homey.settings.get('splines');
-          if (splines == undefined || splines === null) {
-            splines = [];
-          }
-          resolve(splines);
-        });
+        return this.splineAutocompleteListener(query, args);
       });
 
     let querySplineToVariableAction = this.homey.flow.getActionCard('query_spline_write_variable');
@@ -205,13 +181,7 @@ class SplinesApp extends Homey.App {
 
     querySplineToVariableAction.getArgument('spline')
       .registerAutocompleteListener((query, args) => {
-        return new Promise((resolve) => {
-          let splines = this.homey.settings.get('splines');
-          if (splines == undefined || splines === null) {
-            splines = [];
-          }
-          resolve(splines);
-        });
+        return this.splineAutocompleteListener(query, args);
       });
 
     querySplineToVariableAction.getArgument('variable')
@@ -261,13 +231,7 @@ class SplinesApp extends Homey.App {
 
     querySplineTimeBasedAction.getArgument('spline')
       .registerAutocompleteListener((query, args) => {
-        return new Promise((resolve) => {
-          let splines = this.homey.settings.get('splines');
-          if (splines == undefined || splines === null) {
-            splines = [];
-          }
-          resolve(splines);
-        });
+        return this.splineAutocompleteListener(query, args);
       });
 
     let querySplineTimeBasedToVariableAction = this.homey.flow.getActionCard('query_spline_time_based_write_variable');
@@ -312,13 +276,7 @@ class SplinesApp extends Homey.App {
 
     querySplineTimeBasedToVariableAction.getArgument('spline')
       .registerAutocompleteListener((query, args) => {
-        return new Promise((resolve) => {
-          let splines = this.homey.settings.get('splines');
-          if (splines == undefined || splines === null) {
-            splines = [];
-          }
-          resolve(splines);
-        });
+        return this.splineAutocompleteListener(query, args);
       });
 
     querySplineTimeBasedToVariableAction.getArgument('variable')
@@ -371,6 +329,20 @@ class SplinesApp extends Homey.App {
       this.api = HomeyAPI.forCurrentHomey(this.homey);
     }
     return this.api;
+  }
+
+  splineAutocompleteListener(query, args) {
+    return new Promise((resolve) => {
+      let splines = this.homey.settings.get('splines');
+      if (splines == undefined || splines === null) {
+        splines = [];
+      }
+      resolve(splines
+        .filter(e => !query || e.name && e.name.toLowerCase().includes(query.toLowerCase()))
+        .sort((i, j) =>
+          ('' + i.name).localeCompare(j.name)
+        ));
+    });
   }
 
   async numberVariableAutocompleteListener(query, args) {
