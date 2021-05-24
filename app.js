@@ -215,8 +215,8 @@ class SplinesApp extends Homey.App {
       });
 
     querySplineToVariableAction.getArgument('variable')
-      .registerAutocompleteListener((query, args) => {
-        return await this.variableAutocompleteListener(query, args)
+      .registerAutocompleteListener(async (query, args) => {
+        return await this.numberVariableAutocompleteListener(query, args);
       });
 
     let querySplineTimeBasedAction = this.homey.flow.getActionCard('query_spline_time_based');
@@ -320,8 +320,8 @@ class SplinesApp extends Homey.App {
       });
 
     querySplineTimeBasedToVariableAction.getArgument('variable')
-      .registerAutocompleteListener((query, args) => {
-        return await this.variableAutocompleteListener(query, args)
+      .registerAutocompleteListener(async (query, args) => {
+        return await this.numberVariableAutocompleteListener(query, args);
       });
   }
 
@@ -371,7 +371,7 @@ class SplinesApp extends Homey.App {
     return this.api;
   }
 
-  async variableAutocompleteListener(query, args) {
+  async numberVariableAutocompleteListener(query, args) {
     const api = await this.homey.app.getApi();
     const variables = await api.logic.getVariables();
     return variables
