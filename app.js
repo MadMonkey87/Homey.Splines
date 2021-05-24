@@ -21,7 +21,7 @@ class SplinesApp extends Homey.App {
 
       this.globalDropTokens[splines[i].id] = await this.homey.flow.createToken(splines[i].id, {
         type: "number",
-        title: splines[i].name,
+        title: splines[i].name
       });
     }
     this.homey.settings.set('splines', splines);
@@ -142,7 +142,7 @@ class SplinesApp extends Homey.App {
         if (this.globalDropTokens[splines[i].id] == null || this.globalDropTokens[splines[i].id] == undefined) {
           this.globalDropTokens[splines[i].id] = await this.homey.flow.createToken(splines[i].id, {
             type: "number",
-            title: splines[i].name,
+            title: splines[i].name
           });
         }
       }
