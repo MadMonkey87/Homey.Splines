@@ -62,7 +62,7 @@ class SplinesApp extends Homey.App {
               const state = { spline: args.spline.id };
               this.log('query completed ', tokens, state);
 
-              // this.queryCompletedTrigger.trigger(tokens, state);
+              this.queryCompletedTrigger.trigger(tokens, state);
               await this.globalDropTokens[args.spline.id].setValue(result);
 
               resolve(true);
@@ -108,7 +108,7 @@ class SplinesApp extends Homey.App {
                 const state = { spline: args.spline.id };
                 this.log('time based query completed ', tokens, state, value);
 
-                //this.queryCompletedTrigger.trigger(tokens, state);
+                this.queryCompletedTrigger.trigger(tokens, state);
                 await this.globalDropTokens[args.spline.id].setValue(result);
 
                 resolve(true);
@@ -244,6 +244,7 @@ class SplinesApp extends Homey.App {
 
                 this.queryCompletedTrigger.trigger(tokens, state);
                 await this.globalDropTokens[args.spline.id].setValue(result);
+                await this.setNumberVariableValue(args.variable.id, result);
 
                 resolve(true);
 
@@ -294,6 +295,7 @@ class SplinesApp extends Homey.App {
 
                 this.queryCompletedTrigger.trigger(tokens, state);
                 await this.globalDropTokens[args.spline.id].setValue(result);
+                await this.setNumberVariableValue(args.variable.id, result);
 
                 resolve(true);
 
@@ -384,6 +386,11 @@ class SplinesApp extends Homey.App {
       .sort((i, j) =>
         ('' + i.name).localeCompare(j.name)
       );
+  }
+
+  async setNumberVariableValue(id, value) {
+    const api = await this.homey.app.getApi();
+    await api.logic.setVariable(id, { value: value });
   }
 
 }
