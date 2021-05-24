@@ -78,6 +78,58 @@
         "id": "query_completed"
       }
     ],
+    "conditions": [
+      {
+        "title": {
+          "en": "Query a spline and wait for the result"
+        },
+        "hint": {
+          "en": "Calculates the Y value of a given spline for a provided X value and waits until the calculation is done. You then can get the result in a 'then' flow card from the global drop token."
+        },
+        "titleFormatted": {
+          "en": "Query [[spline]] at [[value]] and wait for the result"
+        },
+        "args": [
+          {
+            "type": "autocomplete",
+            "name": "spline",
+            "title": {
+              "en": "Spline - create a spline in the app config and select it here"
+            }
+          },
+          {
+            "type": "number",
+            "name": "value",
+            "title": {
+              "en": "Value - the 'X' value on the spline"
+            },
+            "placeholder": "0.75"
+          }
+        ],
+        "id": "query_spline_condition"
+      },
+      {
+        "title": {
+          "en": "Query a spline (time based) and wait for the result"
+        },
+        "hint": {
+          "en": "Calculates the Y value of a given spline depending on the current time of the day and waits until the calculation is done. You then can get the result in a 'then' flow card from the global drop token."
+        },
+        "titleFormatted": {
+          "en": "Query [[spline]] based on the current time and wait for the result"
+        },
+        "args": [
+          {
+            "type": "autocomplete",
+            "name": "spline",
+            "title": {
+              "en": "Spline - create a spline in the app config and select it here"
+            }
+          }
+        ],
+        "id": "query_spline_time_based_condition"
+      }
+    ],
     "actions": [
       {
         "title": {
