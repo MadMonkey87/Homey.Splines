@@ -150,7 +150,7 @@ class SplinesApp extends Homey.App {
         return this.splineAutocompleteListener(query, args);
       });
 
-    let querySplineToVariableAction = this.homey.flow.getActionCard('query_spline_write_variable');
+    /*let querySplineToVariableAction = this.homey.flow.getActionCard('query_spline_write_variable');
     querySplineToVariableAction
       .registerRunListener(async (args, state) => {
         return new Promise(async (resolve) => {
@@ -188,7 +188,7 @@ class SplinesApp extends Homey.App {
     querySplineToVariableAction.getArgument('variable')
       .registerAutocompleteListener(async (query, args) => {
         return await this.numberVariableAutocompleteListener(query, args);
-      });
+      });*/
 
     let querySplineTimeBasedAction = this.homey.flow.getActionCard('query_spline_time_based');
     querySplineTimeBasedAction
@@ -233,7 +233,7 @@ class SplinesApp extends Homey.App {
         return this.splineAutocompleteListener(query, args);
       });
 
-    let querySplineTimeBasedToVariableAction = this.homey.flow.getActionCard('query_spline_time_based_write_variable');
+    /*let querySplineTimeBasedToVariableAction = this.homey.flow.getActionCard('query_spline_time_based_write_variable');
     querySplineTimeBasedToVariableAction
       .registerRunListener(async (args, state) => {
         return new Promise(async (resolve) => {
@@ -281,7 +281,8 @@ class SplinesApp extends Homey.App {
     querySplineTimeBasedToVariableAction.getArgument('variable')
       .registerAutocompleteListener(async (query, args) => {
         return await this.numberVariableAutocompleteListener(query, args);
-      });
+      });*/
+
   }
 
   async onSettingsChanged(modifiedKey) {
@@ -357,8 +358,6 @@ class SplinesApp extends Homey.App {
         variables.push(value);
       })
 
-      this.log(variables);
-
       resolve(
         variables
           .filter(e => e.type == 'number')
@@ -374,8 +373,16 @@ class SplinesApp extends Homey.App {
   }
 
   async setNumberVariableValue(id, value) {
-    const api = await this.homey.app.getApi();
-    await api.logic.setVariable(id, { value: value });
+
+    try {
+      const api = await this.homey.app.getApi();
+      const variable = await api.logic.getVariable({ id: id });
+      await api.logic.updateVariable({ id: id, variable: { ...variable, value: value } });
+      return true;
+    } catch (error) {
+      this.log('failed to set a number variable', error);
+      return false;
+    }
   }
 
 }

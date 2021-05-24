@@ -24,6 +24,6 @@
     "en": "Upgrade to SDK v3, confirmation required for deleting a spline"
   },
   "2.1.0": {
-    "en": "The latest calculation value of each spline is available as a global drop token, flow cards to directly store the spline calculation result into a logic variable, improved drop down behaviour"
+    "en": "The latest calculation value of each spline is available as a global drop token, improved drop down behaviour"
   }
 }

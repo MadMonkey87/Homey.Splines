@@ -14,7 +14,6 @@ Splines are two dimensional functions that can be very helpful for your home aut
  - Create a second flow that used the 'Query completed' trigger card which contains the calculated position on the spline to set the brightness of your lights for example
 
 # Alternative usage
- - It is now also possible to store the result of the spline calculation directly into a logic variable
  - Every spline calculation is now also available as a global token. In the 'when' part of the flow card add a 'Query a spline and wait for the result' condition. In the 'then' part you can use the flow token. Note: this might not be suitable if you use the same spline for different purposes as the drop token can only represent the latest calculation result.
 
  # Examples
