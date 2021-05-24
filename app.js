@@ -26,6 +26,8 @@ class SplinesApp extends Homey.App {
     }
     this.homey.settings.set('splines', splines);
 
+    this.homey.settings.on('set', this.onSettingsChanged.bind(this))
+
     this.queryCompletedAction = this.homey.flow.getTriggerCard('query_completed')
       .registerRunListener((args, state) => {
         return Promise.resolve(args.spline.id === state.spline);
@@ -131,6 +133,20 @@ class SplinesApp extends Homey.App {
           resolve(splines);
         });
       });
+  }
+
+  onSettingsChanged(modifiedKey) {
+    if (modifiedKey == 'splines') {
+      let splines = this.homey.settings.get('splines');
+      for (var i = 0; i < splines.length; i++) {
+        if (this.globalDropTokens[splines[i].id] == null || this.globalDropTokens[splines[i].id] == undefined) {
+          this.globalDropTokens[splines[i].id] = await this.homey.flow.createToken(splines[i].id, {
+            type: "number",
+            title: splines[i].name,
+          });
+        }
+      }
+    }
   }
 
   async liveTest(spline) {
