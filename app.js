@@ -214,6 +214,11 @@ class SplinesApp extends Homey.App {
         });
       });
 
+    querySplineToVariableAction.getArgument('variable')
+      .registerAutocompleteListener((query, args) => {
+        return await this.variableAutocompleteListener(query, args)
+      });
+
     let querySplineTimeBasedAction = this.homey.flow.getActionCard('query_spline_time_based');
     querySplineTimeBasedAction
       .registerRunListener(async (args, state) => {
@@ -314,7 +319,10 @@ class SplinesApp extends Homey.App {
         });
       });
 
-
+    querySplineTimeBasedToVariableAction.getArgument('variable')
+      .registerAutocompleteListener((query, args) => {
+        return await this.variableAutocompleteListener(query, args)
+      });
   }
 
   onSettingsChanged(modifiedKey) {
@@ -361,6 +369,21 @@ class SplinesApp extends Homey.App {
       this.api = HomeyAPI.forCurrentHomey(this.homey);
     }
     return this.api;
+  }
+
+  async variableAutocompleteListener(query, args) {
+    const api = await this.homey.app.getApi();
+    const variables = await api.logic.getVariables();
+    return variables
+      .filter(e => e.type == 'number')
+      .map(e => {
+        let result = { name: e.name, description: e.value, id: e.id }
+        return result;
+      })
+      .filter(e => !query || e.name && e.name.toLowerCase().includes(query.toLowerCase()))
+      .sort((i, j) =>
+        ('' + i.name).localeCompare(j.name)
+      );
   }
 
 }
