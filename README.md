@@ -20,3 +20,5 @@ Splines are two dimensional functions that can be very helpful for your home aut
  # Examples
   - Automatically apply the brightness or color temperature of your lights  during the day
   - Fade in/out the volume of your speakers or the brightness of your lights with a custom pattern, i.e. start slowly and accelerate at the end
+
+![SplineConfig](https://github.com/MadMonkey87/Homey.Splines/screenshots/SplineConfig.jpg "SplineConfig")
