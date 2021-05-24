@@ -1,5 +1,7 @@
 # Splines
 
+[![current version](https://img.shields.io/badge/version-2.1.0-<COLOR>.svg)](https://shields.io/)
+
 Provides an UI to create splines and some flow cards to make use of it.
 
 # Introduction
