@@ -44,6 +44,46 @@ class SplinesApp extends Homey.App {
         });
       });
 
+    let querySplineCondition = this.homey.flow.getConditionCard('query_spline_condition');
+    querySplineCondition
+      .registerRunListener((args, state) => {
+        return new Promise((resolve) => {
+          // todo
+          resolve();
+        });
+      });
+
+    querySplineCondition.getArgument('spline')
+      .registerAutocompleteListener((query, args) => {
+        return new Promise((resolve) => {
+          let splines = this.homey.settings.get('splines');
+          if (splines == undefined || splines === null) {
+            splines = [];
+          }
+          resolve(splines);
+        });
+      });
+
+    let querySplineTimeBasedCondition = this.homey.flow.getConditionCard('query_spline_time_based_condition');
+    querySplineTimeBasedCondition
+      .registerRunListener((args, state) => {
+        return new Promise((resolve) => {
+          // todo
+          resolve();
+        });
+      });
+
+    querySplineTimeBasedCondition.getArgument('spline')
+      .registerAutocompleteListener((query, args) => {
+        return new Promise((resolve) => {
+          let splines = this.homey.settings.get('splines');
+          if (splines == undefined || splines === null) {
+            splines = [];
+          }
+          resolve(splines);
+        });
+      });
+
     let querySplineAction = this.homey.flow.getActionCard('query_spline');
     querySplineAction
       .registerRunListener(async (args, state) => {
