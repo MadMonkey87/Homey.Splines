@@ -9,13 +9,20 @@ class SplinesApp extends Homey.App {
   async onInit() {
     this.log('SplinesApp has been initialized');
 
-    // migrate if necessary
+    this.globalDropTokens = {};
+
     let splines = this.homey.settings.get('splines');
     for (var i = 0; i < splines.length; i++) {
+      // migrate if necessary
       if (!splines[i].digits) {
         this.log('Set digits for ' + splines[i].id);
         splines[i].digits = 2;
       }
+
+      this.globalDropTokens[splines[i].id] = await this.homey.flow.createToken(splines[i].id, {
+        type: "number",
+        title: splines[i].name,
+      });
     }
     this.homey.settings.set('splines', splines);
 
@@ -37,7 +44,7 @@ class SplinesApp extends Homey.App {
 
     let querySplineAction = this.homey.flow.getActionCard('query_spline');
     querySplineAction
-      .registerRunListener((args, state) => {
+      .registerRunListener(async (args, state) => {
         return new Promise((resolve) => {
           const splines = this.homey.settings.get('splines');
           for (var i = 0; i < splines.length; i++) {
@@ -51,7 +58,9 @@ class SplinesApp extends Homey.App {
               const tokens = { result: result };
               const state = { spline: args.spline.id };
               this.log('query completed ', tokens, state);
+
               this.queryCompletedAction.trigger(tokens, state);
+              await this.globalDropTokens[args.spline.id].setValue(result);
 
               resolve(true);
               break;
@@ -75,7 +84,7 @@ class SplinesApp extends Homey.App {
 
     let querySplineTimeBasedAction = this.homey.flow.getActionCard('query_spline_time_based');
     querySplineTimeBasedAction
-      .registerRunListener((args, state) => {
+      .registerRunListener(async (args, state) => {
         return new Promise((resolve) => {
           const splines = this.homey.settings.get('splines');
           for (var i = 0; i < splines.length; i++) {
@@ -92,11 +101,12 @@ class SplinesApp extends Homey.App {
                 const splineCalculator = new Spline(xs, ys);
                 const result = util.clamp(+splineCalculator.at(value).toFixed(splines[i].digits), splines[i].miny, splines[i].maxy);
 
-
                 const tokens = { result: result };
                 const state = { spline: args.spline.id };
                 this.log('time based query completed ', tokens, state, value);
+
                 this.queryCompletedAction.trigger(tokens, state);
+                await this.globalDropTokens[args.spline.id].setValue(result);
 
                 resolve(true);
 
@@ -123,7 +133,7 @@ class SplinesApp extends Homey.App {
       });
   }
 
-  liveTest(spline) {
+  async liveTest(spline) {
     this.log('live testing ', spline);
     try {
       const xs = spline.vertices.map(v => v.x);
@@ -137,7 +147,10 @@ class SplinesApp extends Homey.App {
       const tokens = { result: result };
       const state = { spline: spline.id };
       this.log('live testing query completed ', tokens, state);
+
       this.queryCompletedAction.trigger(tokens, state);
+      await this.globalDropTokens[spline.id].setValue(result);
+
       return { error: null, result: result };
     } catch (error) {
       this.log('live testing failed', error);
