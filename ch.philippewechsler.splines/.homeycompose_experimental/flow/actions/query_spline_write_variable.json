@@ -1,0 +1,35 @@
+{
+    "title": {
+        "en": "Query a spline and write result to a variable"
+    },
+    "hint": {
+        "en": "Calculates the Y value of a given spline for a provided X value. The result is stored in a variable."
+    },
+    "titleFormatted": {
+        "en": "Query [[spline]] at [[value]] and store it to [[variable]]"
+    },
+    "args": [
+        {
+            "type": "autocomplete",
+            "name": "spline",
+            "title": {
+                "en": "Spline - create a spline in the app config and select it here"
+            }
+        },
+        {
+            "type": "number",
+            "name": "value",
+            "title": {
+                "en": "Value - the 'X' value on the spline"
+            },
+            "placeholder": "0.75"
+        },
+        {
+            "type": "autocomplete",
+            "name": "variable",
+            "title": {
+                "en": "Variable"
+            }
+        }
+    ]
+}

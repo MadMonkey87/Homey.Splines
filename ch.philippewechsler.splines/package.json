@@ -6,6 +6,7 @@
     "homey": "^2.18.0"
   },
   "dependencies": {
+    "athom-api": "^3.6.0",
     "cubic-spline": "^3.0.3"
   }
 }

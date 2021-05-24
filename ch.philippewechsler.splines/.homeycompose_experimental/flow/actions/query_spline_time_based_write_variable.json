@@ -1,0 +1,27 @@
+{
+    "title": {
+        "en": "Query a spline (time based) and write result to a variable"
+    },
+    "hint": {
+        "en": "Calculates the Y value of a given spline depending on the current time of the day. The result is stored in a variable."
+    },
+    "titleFormatted": {
+        "en": "Query [[spline]] based on the current time and store it to [[variable]]"
+    },
+    "args": [
+        {
+            "type": "autocomplete",
+            "name": "spline",
+            "title": {
+                "en": "Spline - create a spline in the app config and select it here"
+            }
+        },
+        {
+            "type": "autocomplete",
+            "name": "variable",
+            "title": {
+                "en": "Variable"
+            }
+        }
+    ]
+}

@@ -6,6 +6,9 @@ Usage
  - Create a trigger flow card 'Query a spline' or 'Query a spline (time based)' and select the desired spline
  - Create a second flow that used the 'Query completed' trigger card which contains the calculated position on the spline to set the brightness of your lights for example
 
+Alternative usage
+ - Every spline calculation is now also available as a global token. In the 'when' part of the flow card add a 'Query a spline and wait for the result' condition. In the 'then' part you can use the flow token. Note: this might not be suitable if you use the same spline for different purposes as the drop token can only represent the latest calculation result.
+
  Examples
-  - automatically apply the brightness or color temperature of your lights  during the day
-  - fade in/out the volume of your speakers or the brightness of your lights with a custom pattern, i.e. start slowly and accelerate at the end
+  - Automatically apply the brightness or color temperature of your lights  during the day
+  - Fade in/out the volume of your speakers or the brightness of your lights with a custom pattern, i.e. start slowly and accelerate at the end

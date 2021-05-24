@@ -1,6 +1,6 @@
 {
   "id": "ch.philippewechsler.splines",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "compatibility": ">=5.0.0",
   "brandColor": "#004a46",
   "sdk": 3,
@@ -13,7 +13,9 @@
   "category": [
     "tools"
   ],
-  "permissions": [],
+  "permissions": [
+    "homey:manager:api"
+  ],
   "images": {
     "large": "/assets/images/large.png",
     "small": "/assets/images/small.png"
