@@ -28,12 +28,12 @@ class SplinesApp extends Homey.App {
 
     this.homey.settings.on('set', this.onSettingsChanged.bind(this))
 
-    this.queryCompletedAction = this.homey.flow.getTriggerCard('query_completed')
+    this.queryCompletedTrigger = this.homey.flow.getTriggerCard('query_completed')
       .registerRunListener((args, state) => {
         return Promise.resolve(args.spline.id === state.spline);
       });
 
-    this.queryCompletedAction.getArgument('spline')
+    this.queryCompletedTrigger.getArgument('spline')
       .registerAutocompleteListener((query, args) => {
         return new Promise((resolve) => {
           let splines = this.homey.settings.get('splines');
@@ -61,7 +61,7 @@ class SplinesApp extends Homey.App {
               const state = { spline: args.spline.id };
               this.log('query completed ', tokens, state);
 
-              this.queryCompletedAction.trigger(tokens, state);
+              this.queryCompletedTrigger.trigger(tokens, state);
               await this.globalDropTokens[args.spline.id].setValue(result);
 
               resolve(true);
@@ -107,7 +107,7 @@ class SplinesApp extends Homey.App {
                 const state = { spline: args.spline.id };
                 this.log('time based query completed ', tokens, state, value);
 
-                this.queryCompletedAction.trigger(tokens, state);
+                this.queryCompletedTrigger.trigger(tokens, state);
                 await this.globalDropTokens[args.spline.id].setValue(result);
 
                 resolve(true);
@@ -164,7 +164,7 @@ class SplinesApp extends Homey.App {
       const state = { spline: spline.id };
       this.log('live testing query completed ', tokens, state);
 
-      this.queryCompletedAction.trigger(tokens, state);
+      this.queryCompletedTrigger.trigger(tokens, state);
       await this.globalDropTokens[spline.id].setValue(result);
 
       return { error: null, result: result };
