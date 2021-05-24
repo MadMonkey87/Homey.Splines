@@ -169,6 +169,7 @@ class SplinesApp extends Homey.App {
 
               this.queryCompletedTrigger.trigger(tokens, state);
               await this.globalDropTokens[args.spline.id].setValue(result);
+              await this.setNumberVariableValue(args.variable.id, result);
 
               resolve(true);
               break;
@@ -214,7 +215,6 @@ class SplinesApp extends Homey.App {
 
                 this.queryCompletedTrigger.trigger(tokens, state);
                 await this.globalDropTokens[args.spline.id].setValue(result);
-                await this.setNumberVariableValue(args.variable.id, result);
 
                 resolve(true);
 
