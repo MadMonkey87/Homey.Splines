@@ -42,7 +42,7 @@ class SplinesApp extends Homey.App {
     let querySplineCondition = this.homey.flow.getConditionCard('query_spline_condition');
     querySplineCondition
       .registerRunListener(async (args, state) => {
-        return new Promise((resolve) => {
+        return new Promise(async (resolve) => {
           const splines = this.homey.settings.get('splines');
           for (var i = 0; i < splines.length; i++) {
             if (splines[i].id === args.spline.id) {
@@ -76,7 +76,7 @@ class SplinesApp extends Homey.App {
     let querySplineTimeBasedCondition = this.homey.flow.getConditionCard('query_spline_time_based_condition');
     querySplineTimeBasedCondition
       .registerRunListener(async (args, state) => {
-        return new Promise((resolve) => {
+        return new Promise(async (resolve) => {
           const splines = this.homey.settings.get('splines');
           for (var i = 0; i < splines.length; i++) {
             if (splines[i].id === args.spline.id) {
@@ -119,7 +119,7 @@ class SplinesApp extends Homey.App {
     let querySplineAction = this.homey.flow.getActionCard('query_spline');
     querySplineAction
       .registerRunListener(async (args, state) => {
-        return new Promise((resolve) => {
+        return new Promise(async (resolve) => {
           const splines = this.homey.settings.get('splines');
           for (var i = 0; i < splines.length; i++) {
             if (splines[i].id === args.spline.id) {
@@ -153,7 +153,7 @@ class SplinesApp extends Homey.App {
     let querySplineToVariableAction = this.homey.flow.getActionCard('query_spline_write_variable');
     querySplineToVariableAction
       .registerRunListener(async (args, state) => {
-        return new Promise((resolve) => {
+        return new Promise(async (resolve) => {
           const splines = this.homey.settings.get('splines');
           for (var i = 0; i < splines.length; i++) {
             if (splines[i].id === args.spline.id) {
@@ -192,7 +192,7 @@ class SplinesApp extends Homey.App {
     let querySplineTimeBasedAction = this.homey.flow.getActionCard('query_spline_time_based');
     querySplineTimeBasedAction
       .registerRunListener(async (args, state) => {
-        return new Promise((resolve) => {
+        return new Promise(async (resolve) => {
           const splines = this.homey.settings.get('splines');
           for (var i = 0; i < splines.length; i++) {
             if (splines[i].id === args.spline.id) {
@@ -237,7 +237,7 @@ class SplinesApp extends Homey.App {
     let querySplineTimeBasedToVariableAction = this.homey.flow.getActionCard('query_spline_time_based_write_variable');
     querySplineTimeBasedToVariableAction
       .registerRunListener(async (args, state) => {
-        return new Promise((resolve) => {
+        return new Promise(async (resolve) => {
           const splines = this.homey.settings.get('splines');
           for (var i = 0; i < splines.length; i++) {
             if (splines[i].id === args.spline.id) {
@@ -285,7 +285,7 @@ class SplinesApp extends Homey.App {
       });
   }
 
-  onSettingsChanged(modifiedKey) {
+  async onSettingsChanged(modifiedKey) {
     if (modifiedKey == 'splines') {
       let splines = this.homey.settings.get('splines');
       for (var i = 0; i < splines.length; i++) {
@@ -346,18 +346,32 @@ class SplinesApp extends Homey.App {
   }
 
   async numberVariableAutocompleteListener(query, args) {
-    const api = await this.homey.app.getApi();
-    const variables = await api.logic.getVariables();
-    return variables
-      .filter(e => e.type == 'number')
-      .map(e => {
-        let result = { name: e.name, description: e.value, id: e.id }
-        return result;
+    return new Promise(async (resolve) => {
+      const api = await this.homey.app.getApi();
+      const raw = await api.logic.getVariables();
+
+      let variables = [];
+
+      Object.entries(raw).forEach(entry => {
+        const key = entry[0];
+        const value = entry[1];
+        variables.push(value);
       })
-      .filter(e => !query || e.name && e.name.toLowerCase().includes(query.toLowerCase()))
-      .sort((i, j) =>
-        ('' + i.name).localeCompare(j.name)
-      );
+
+      this.log(variables);
+
+      resolve(
+        variables
+          .filter(e => e.type == 'number')
+          .map(e => {
+            let result = { name: e.name, description: e.value, id: e.id }
+            return result;
+          })
+          .filter(e => !query || e.name && e.name.toLowerCase().includes(query.toLowerCase()))
+          .sort((i, j) =>
+            ('' + i.name).localeCompare(j.name)
+          ));
+    })
   }
 
   async setNumberVariableValue(id, value) {
