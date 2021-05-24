@@ -174,6 +174,46 @@ class SplinesApp extends Homey.App {
         });
       });
 
+    let querySplineToVariableAction = this.homey.flow.getActionCard('query_spline_write_variable');
+    querySplineToVariableAction
+      .registerRunListener(async (args, state) => {
+        return new Promise((resolve) => {
+          const splines = this.homey.settings.get('splines');
+          for (var i = 0; i < splines.length; i++) {
+            if (splines[i].id === args.spline.id) {
+              const xs = splines[i].vertices.map(v => v.x);
+              const ys = splines[i].vertices.map(v => v.y);
+
+              const splineCalculator = new Spline(xs, ys);
+              const result = util.clamp(+splineCalculator.at(args.value).toFixed(splines[i].digits), splines[i].miny, splines[i].maxy);
+
+              const tokens = { result: result };
+              const state = { spline: args.spline.id };
+              this.log('query completed ', tokens, state);
+
+              this.queryCompletedTrigger.trigger(tokens, state);
+              await this.globalDropTokens[args.spline.id].setValue(result);
+
+              resolve(true);
+              break;
+            }
+          }
+          this.log('No spline found for ', args.state.id);
+          resolve(false);
+        });
+      });
+
+    querySplineToVariableAction.getArgument('spline')
+      .registerAutocompleteListener((query, args) => {
+        return new Promise((resolve) => {
+          let splines = this.homey.settings.get('splines');
+          if (splines == undefined || splines === null) {
+            splines = [];
+          }
+          resolve(splines);
+        });
+      });
+
     let querySplineTimeBasedAction = this.homey.flow.getActionCard('query_spline_time_based');
     querySplineTimeBasedAction
       .registerRunListener(async (args, state) => {
@@ -223,6 +263,58 @@ class SplinesApp extends Homey.App {
           resolve(splines);
         });
       });
+
+    let querySplineTimeBasedToVariableAction = this.homey.flow.getActionCard('query_spline_time_based_write_variable');
+    querySplineTimeBasedToVariableAction
+      .registerRunListener(async (args, state) => {
+        return new Promise((resolve) => {
+          const splines = this.homey.settings.get('splines');
+          for (var i = 0; i < splines.length; i++) {
+            if (splines[i].id === args.spline.id) {
+
+              try {
+                const xs = splines[i].vertices.map(v => v.x);
+                const ys = splines[i].vertices.map(v => v.y);
+
+                const now = new Date();
+                let value = now.getHours() + (now.getMinutes() / 60) + (now.getSeconds() / 3600);
+                value = value / 24 * (splines[i].maxx - splines[i].minx);
+
+                const splineCalculator = new Spline(xs, ys);
+                const result = util.clamp(+splineCalculator.at(value).toFixed(splines[i].digits), splines[i].miny, splines[i].maxy);
+
+                const tokens = { result: result };
+                const state = { spline: args.spline.id };
+                this.log('time based query completed ', tokens, state, value);
+
+                this.queryCompletedTrigger.trigger(tokens, state);
+                await this.globalDropTokens[args.spline.id].setValue(result);
+
+                resolve(true);
+
+              } catch (e) {
+                this.log(e);
+              }
+              break;
+            }
+          }
+          this.log('No spline found for ', args.state.id);
+          resolve(false);
+        });
+      });
+
+    querySplineTimeBasedToVariableAction.getArgument('spline')
+      .registerAutocompleteListener((query, args) => {
+        return new Promise((resolve) => {
+          let splines = this.homey.settings.get('splines');
+          if (splines == undefined || splines === null) {
+            splines = [];
+          }
+          resolve(splines);
+        });
+      });
+
+
   }
 
   onSettingsChanged(modifiedKey) {
