@@ -3,6 +3,7 @@
 const Homey = require('homey');
 const Spline = require('cubic-spline');
 const { util } = require('./util');
+const { HomeyAPI } = require('athom-api');
 
 class SplinesApp extends Homey.App {
 
@@ -111,7 +112,6 @@ class SplinesApp extends Homey.App {
                 await this.globalDropTokens[args.spline.id].setValue(result);
 
                 resolve(true);
-
               } catch (e) {
                 this.log(e);
               }
@@ -262,6 +262,13 @@ class SplinesApp extends Homey.App {
       this.log('live testing failed', error);
       return { error: error, result: null };
     }
+  }
+
+  getApi() {
+    if (!this.api) {
+      this.api = HomeyAPI.forCurrentHomey(this.homey);
+    }
+    return this.api;
   }
 
 }
