@@ -60,7 +60,7 @@ class SplinesApp extends Homey.App {
               await this.globalDropTokens[args.spline.id].setValue(result);
 
               resolve(true);
-              break;
+              return;
             }
           }
           this.log('No spline found for ', args.state.id);
@@ -103,7 +103,7 @@ class SplinesApp extends Homey.App {
               } catch (e) {
                 this.log(e);
               }
-              break;
+              return;
             }
           }
           this.log('No spline found for ', args.state.id);
@@ -137,7 +137,7 @@ class SplinesApp extends Homey.App {
               await this.globalDropTokens[args.spline.id].setValue(result);
 
               resolve(true);
-              break;
+              return;
             }
           }
           this.log('No spline found for ', args.state.id);
@@ -172,7 +172,7 @@ class SplinesApp extends Homey.App {
               await this.setNumberVariableValue(args.variable.id, result);
 
               resolve(true);
-              break;
+              return;
             }
           }
           this.log('No spline found for ', args.state.id);
@@ -217,11 +217,10 @@ class SplinesApp extends Homey.App {
                 await this.globalDropTokens[args.spline.id].setValue(result);
 
                 resolve(true);
-
               } catch (e) {
                 this.log(e);
               }
-              break;
+              return;
             }
           }
           this.log('No spline found for ', args.state.id);
@@ -266,7 +265,7 @@ class SplinesApp extends Homey.App {
               } catch (e) {
                 this.log(e);
               }
-              break;
+              return;
             }
           }
           this.log('No spline found for ', args.state.id);
